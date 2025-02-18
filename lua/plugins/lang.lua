@@ -42,9 +42,15 @@ return {
 		end,
 	},
 	{
-		import = "lazyvim.plugins.extras.lang.tex",
+		import = "plugins.extras.lang.tex",
 		enabled = function()
 			return vim.fn.executable("latexmk") == 1
+		end,
+	},
+	{
+		import = "plugins.extras.lang.vhdl",
+		enabled = function()
+			return vim.fn.executable("ghdl") == 1
 		end,
 	},
 }

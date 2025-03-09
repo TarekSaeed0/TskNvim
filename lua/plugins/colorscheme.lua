@@ -24,7 +24,9 @@ return {
 					NormalC = { fg = colors.text, bg = colors.base },
 					NormalNC = { fg = colors.overlay0, bg = colors.mantle },
 
-					NormalFloat = { link = "NormalFloatC" },
+					NormalFloat = {
+						link = vim.g.tsknvim_performance and "NormalFloatNC" or "NormalFloatC",
+					},
 					NormalFloatC = { fg = colors.text, bg = colors.base },
 					NormalFloatNC = { fg = colors.overlay0, bg = colors.mantle },
 
@@ -49,6 +51,8 @@ return {
 					TabLineFill = { fg = colors.overlay0 },
 
 					WinBar = { bg = colors.mantle },
+
+					MsgArea = { bg = colors.mantle },
 
 					Pmenu = { link = "NormalFloat" },
 
@@ -77,6 +81,9 @@ return {
 					DapUIStop = { bg = colors.mantle },
 					DapUIStopNC = { link = "DapUIStop" },
 
+					SnacksNormal = {
+						link = vim.g.tsknvim_performance and "NormalFloatC" or "NormalFloat",
+					},
 					SnacksNormalC = { fg = colors.text, bg = colors.base },
 					SnacksNormalNC = { fg = colors.overlay0, bg = colors.mantle },
 					SnacksNotifierError = { link = "NormalFloatNC" },
@@ -138,9 +145,11 @@ return {
 					TelescopeSelectionCaret = { fg = colors.teal },
 					TelescopeMatching = { fg = colors.pink, bold = true },
 
+					LazyNormal = { link = "NormalFloatC" },
 					LazyProgressDone = { fg = colors.sapphire },
 					LazyProgressTodo = { fg = colors.mantle },
 
+					MasonNormal = { link = "NormalFloatC" },
 					MasonHeader = { link = "FloatTitle" },
 					MasonHighlightBlockBold = { bg = colors.sapphire, bold = true },
 

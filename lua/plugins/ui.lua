@@ -89,6 +89,7 @@ return {
 	},
 	{
 		"folke/noice.nvim",
+		enabled = not vim.g.tsknvim_performance,
 		opts = {
 			presets = {
 				bottom_search = false,

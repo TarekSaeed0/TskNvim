@@ -2,10 +2,11 @@
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
 
+vim.g.tsknvim_performance = vim.fn.executable("termux-setup-storage") == 1
+
+vim.g.lazyvim_check_order = false
 vim.g.lazyvim_picker = "telescope"
 vim.g.lazyvim_cmp = "nvim-cmp"
-
-vim.opt.guifont = { "FiraCode Nerd Font:h11" }
 
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 0

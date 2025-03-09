@@ -1,6 +1,7 @@
 return {
 	{
 		"hrsh7th/nvim-cmp",
+		event = "CmdlineEnter",
 		dependencies = { "hrsh7th/cmp-cmdline" },
 		opts = function(_, opts)
 			local cmp = require("cmp")

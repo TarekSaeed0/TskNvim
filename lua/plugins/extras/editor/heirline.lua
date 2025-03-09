@@ -255,7 +255,7 @@ return {
 							)
 					end,
 					condition = function()
-						return vim.v.hlsearch ~= 0 and #vim.fn.searchcount() ~= 0
+						return vim.v.hlsearch ~= 0 and not vim.tbl_isempty(vim.fn.searchcount())
 					end,
 				},
 				{
@@ -892,7 +892,7 @@ return {
 								child.buffer = buffer
 							end
 
-							if buffer == tonumber(vim.g.actual_curbuf) and LazyVim.in_focus then
+							if buffer == tonumber(vim.g.actual_curbuf) and vim.g.tsknvim_in_focus then
 								child.is_active = true
 							else
 								child.is_active = false

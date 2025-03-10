@@ -9,10 +9,12 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		opts = function(_, opts)
-			if type(opts.ensure_installed) == "table" then
-				vim.list_extend(opts.ensure_installed, { "latex" })
-			else
-				opts.ensure_installed = { "latex" }
+			if vim.fn.executable("tree-sitter") then
+				if type(opts.ensure_installed) == "table" then
+					vim.list_extend(opts.ensure_installed, { "latex" })
+				else
+					opts.ensure_installed = { "latex" }
+				end
 			end
 		end,
 	},

@@ -7,6 +7,16 @@ return {
 	end,
 	{ import = "lazyvim.plugins.extras.lang.tex" },
 	{
+		"nvim-treesitter/nvim-treesitter",
+		opts = function(_, opts)
+			if type(opts.ensure_installed) == "table" then
+				vim.list_extend(opts.ensure_installed, { "latex" })
+			else
+				opts.ensure_installed = { "latex" }
+			end
+		end,
+	},
+	{
 		"lervag/vimtex",
 		keys = {
 			{ "<localleader>lf", "<plug>(vimtex-view)", ft = "tex" },

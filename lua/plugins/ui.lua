@@ -58,6 +58,17 @@ return {
 				},
 			},
 			input = { enabled = false },
+			image = {
+				enabled = true,
+				doc = {
+					float = false,
+				},
+				math = {
+					latex = {
+						font_size = "normalsize",
+					},
+				},
+			},
 			notifier = {
 				margin = { right = 0 },
 			},

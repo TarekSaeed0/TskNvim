@@ -15,12 +15,11 @@ vim.opt.expandtab = false
 vim.opt.cinkeys:remove({ "0#" })
 vim.opt.cinoptions:append({ "#1s" })
 
-vim.opt.conceallevel = 0
-
 vim.opt.pumblend = 0
 
 vim.opt.fillchars:append({ foldopen = "", foldclose = "", msgsep = "─" })
 
+vim.g.vimtex_syntax_conceal_disable = 1
 vim.g.vimtex_compiler_progname = "nvr"
 vim.g.vimtex_view_method = "zathura"
 vim.g.vimtex_format_enabled = 1

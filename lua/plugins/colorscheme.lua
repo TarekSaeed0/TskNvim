@@ -113,6 +113,7 @@ return {
 					SnacksDashboardKey = { fg = colors.mauve },
 					SnacksDashboardFooter = { fg = colors.mauve },
 					SnacksDashboardSpecial = { fg = colors.teal },
+					SnacksImageMath = { fg = colors.text },
 
 					NoiceCmdlinePopup = { link = "MsgArea" },
 					NoiceCmdlinePopupBorder = { link = "FloatBorder" },

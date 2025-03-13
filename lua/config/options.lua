@@ -24,9 +24,22 @@ vim.g.vimtex_compiler_progname = "nvr"
 vim.g.vimtex_view_method = "zathura"
 vim.g.vimtex_format_enabled = 1
 vim.g.vimtex_quickfix_enabled = 0
+vim.g.vimtex_compiler_latexmk = {
+	options = {
+		"-verbose",
+		"-file-line-error",
+		"-synctex=1",
+		"-interaction=nonstopmode",
+		"-shell-escape",
+	},
+}
 
 vim.filetype.add({
 	pattern = { ["${XDG_CONFIG_HOME}/hypr/.*%.conf"] = "hyprlang" },
+})
+
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+	border = "rounded",
 })
 
 require("config.usercmds")

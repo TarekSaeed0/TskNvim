@@ -20,7 +20,7 @@ return {
 	{
 		import = "lazyvim.plugins.extras.lang.java",
 		enabled = function()
-			return vim.fn.executable("java") == 1
+			return vim.fn.executable("javac") == 1
 		end,
 	},
 	{

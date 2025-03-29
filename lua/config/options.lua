@@ -17,6 +17,8 @@ vim.opt.cinoptions:append({ "#1s" })
 
 vim.opt.pumblend = 0
 
+vim.opt.winborder = "rounded"
+
 vim.opt.fillchars:append({ foldopen = "", foldclose = "", msgsep = "─" })
 
 vim.g.vimtex_syntax_conceal_disable = 1
@@ -36,10 +38,6 @@ vim.g.vimtex_compiler_latexmk = {
 
 vim.filetype.add({
 	pattern = { ["${XDG_CONFIG_HOME}/hypr/.*%.conf"] = "hyprlang" },
-})
-
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-	border = "rounded",
 })
 
 require("config.usercmds")

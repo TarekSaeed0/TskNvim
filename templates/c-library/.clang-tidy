@@ -7,3 +7,4 @@ Checks: >
   -clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,
   -readability-magic-numbers,
   -cppcoreguidelines-avoid-magic-numbers,
+  -misc-include-cleaner,

@@ -11,8 +11,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-add_executable(#{in_snake_case(name)}# src/#{in_snake_case(name)}#.c src/main.c)
-target_include_directories(#{in_snake_case(name)}# PRIVATE include)
+add_library(#{in_snake_case(name)}# src/#{in_snake_case(name)}#.c)
+target_include_directories(#{in_snake_case(name)}# PUBLIC include)
 target_compile_options(
 	#{in_snake_case(name)}#
 	PRIVATE -Werror
@@ -30,3 +30,13 @@ target_compile_options(
 			-Wcast-qual
 			-Wconversion
 )
+
+if(UNIT_TESTING)
+	list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmocka)
+
+	find_package(cmocka REQUIRED)
+
+	include(AddCMockaTest)
+
+	add_subdirectory(test)
+endif(UNIT_TESTING)

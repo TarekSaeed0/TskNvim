@@ -57,6 +57,11 @@ return {
 					Pmenu = { link = "NormalFloat" },
 
 					LspInlayHint = { bg = "NONE" },
+					DiagnosticVirtualLinesError = { link = "DiagnosticVirtualTextError" },
+					DiagnosticVirtualLinesWarn = { link = "DiagnosticVirtualTextWarn" },
+					DiagnosticVirtualLinesInfo = { link = "DiagnosticVirtualTextInfo" },
+					DiagnosticVirtualLinesHint = { link = "DiagnosticVirtualTextHint" },
+					DiagnosticVirtualLinesOk = { link = "DiagnosticVirtualTextOk" },
 
 					DapBreakpoint = { fg = colors.red },
 					DapBreakpointCondition = { fg = colors.yellow },
@@ -155,6 +160,8 @@ return {
 					MasonHighlightBlockBold = { bg = colors.sapphire, bold = true },
 
 					UfoFoldedEllipsis = { fg = colors.overlay0, bg = "NONE" },
+
+					texOptSep = { link = "Normal" },
 				}
 			end,
 		},

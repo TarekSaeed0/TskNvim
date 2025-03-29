@@ -3,33 +3,13 @@ return {
 		"neovim/nvim-lspconfig",
 		opts = {
 			diagnostics = {
+				virtual_text = false,
+				virtual_lines = true,
 				float = { border = "rounded" },
 			},
 			servers = {
 				rust_analyzer = { mason = false },
 			},
 		},
-	},
-	{
-		"rachartier/tiny-inline-diagnostic.nvim",
-		priority = 1000,
-		opts = {
-			signs = {
-				arrow = "",
-				up_arrow = " ",
-			},
-			hi = { background = "Normal" },
-			options = {
-				multiple_diag_under_cursor = true,
-				multilines = true,
-				show_all_diags_on_cursorline = true,
-			},
-		},
-		config = function(_, opts)
-			vim.diagnostic.config({ virtual_text = false })
-
-			require("tiny-inline-diagnostic").setup(opts)
-		end,
-		event = "VeryLazy",
 	},
 }

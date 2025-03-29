@@ -9,10 +9,12 @@ function expression_utilities.get_case(identifier)
 		return "screaming_snake_case"
 	elseif identifier:match("-") then
 		return "kebab_case"
-	elseif identifier:match("^%u") and not identifier:match("_") then
+	elseif identifier:match("^%u") and not identifier:match(" ") then
 		return "pascal_case"
-	elseif identifier:match("^%l") and not identifier:match("_") then
+	elseif identifier:match("^%l") and not identifier:match(" ") then
 		return "camel_case"
+	elseif identifier:match("^%u") then
+		return "title_case"
 	end
 end
 
@@ -57,6 +59,14 @@ end
 function expression_utilities.in_camel_case(identifier)
 	local result = expression_utilities.in_pascal_case(identifier)
 	result = result:gsub("^%u", string.lower)
+	return result
+end
+
+---@param identifier string
+---@return string
+function expression_utilities.in_title_case(identifier)
+	local result = expression_utilities.in_pascal_case(identifier)
+	result = result:gsub("(%l)(%u)", "%1 %2")
 	return result
 end
 
@@ -242,22 +252,14 @@ local function create_project(project_path, template_path, arguments)
 		elseif is_text_file(path) then
 			local file = io.open(path)
 			if not file then
-				vim.notify(
-					('Failed to open file "%s"'):format(path),
-					vim.log.levels.ERROR,
-					{ title = "create_project" }
-				)
+				vim.notify(('Failed to open file "%s"'):format(path), vim.log.levels.ERROR, { title = "create_project" })
 				return false
 			end
 
 			local content = file:read("*a")
 			file:close()
 			if not content then
-				vim.notify(
-					('Failed to read file "%s"'):format(path),
-					vim.log.levels.ERROR,
-					{ title = "create_project" }
-				)
+				vim.notify(('Failed to read file "%s"'):format(path), vim.log.levels.ERROR, { title = "create_project" })
 				return false
 			end
 
@@ -273,20 +275,12 @@ local function create_project(project_path, template_path, arguments)
 
 			local new_file = io.open(new_path, "w")
 			if not new_file then
-				vim.notify(
-					('Failed to open file "%s"'):format(new_path),
-					vim.log.levels.ERROR,
-					{ title = "create_project" }
-				)
+				vim.notify(('Failed to open file "%s"'):format(new_path), vim.log.levels.ERROR, { title = "create_project" })
 				return false
 			end
 
 			if not new_file:write(content) then
-				vim.notify(
-					('Failed to write file "%s"'):format(new_path),
-					vim.log.levels.ERROR,
-					{ title = "create_project" }
-				)
+				vim.notify(('Failed to write file "%s"'):format(new_path), vim.log.levels.ERROR, { title = "create_project" })
 				return false
 			end
 			new_file:close()
@@ -411,14 +405,16 @@ end, {
 		local key, value = string.match(arg_lead, "([^=]*)=(.*)")
 		if key and value then
 			if key == "template" then
-				return vim.iter(get_templates())
+				return vim
+					.iter(get_templates())
 					:filter(function(item)
 						return string.sub(item, 1, #value) == value
 					end)
 					:totable()
 			end
 		else
-			return vim.iter({ "template=" })
+			return vim
+				.iter({ "template=" })
 				:filter(function(item)
 					return string.sub(item, 1, #arg_lead) == arg_lead
 				end)

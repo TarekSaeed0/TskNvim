@@ -566,7 +566,6 @@ return {
 					},
 					hl = "Normal",
 				},
-				hl = { bold = true },
 				update = { "CursorMoved", "CursorMovedI" },
 			}
 			table.insert(statusline, cursor)

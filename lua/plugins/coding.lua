@@ -1,10 +1,11 @@
 return {
 	{
 		"saghen/blink.cmp",
+		event = "CmdlineEnter",
 		---@module 'blink.cmp'
 		---@type blink.cmp.Config
 		opts = {
-			-- FIX: use vim.opt.winborder instead, when moree plugins support it
+			-- FIX: use vim.opt.winborder instead, when more plugins support it
 			completion = {
 				menu = { border = "rounded" },
 				documentation = { window = { border = "rounded" } },

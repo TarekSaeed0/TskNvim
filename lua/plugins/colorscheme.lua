@@ -124,8 +124,11 @@ return {
 					NoiceCmdlinePopupBorder = { link = "FloatBorder" },
 					NoiceCmdlinePopupBorderSearch = { link = "NoiceCmdlinePopupBorder" },
 					NoiceConfirm = { fg = colors.text, bg = colors.mantle },
-
 					NoiceConfirmBorder = { link = "FloatBorder" },
+
+					BlinkCmpSignatureHelpBorder = { link = "FloatBorder" },
+					BlinkCmpMenuBorder = { link = "FloatBorder" },
+					BlinkCmpDocBorder = { link = "FloatBorder" },
 
 					NeoTreeNormal = { bg = colors.base },
 					NeoTreeWinSeparator = { link = "WinSeparator" },

@@ -6,8 +6,6 @@ vim.g.tsknvim_performance = vim.fn.executable("termux-setup-storage") == 1
 
 vim.g.lazyvim_check_order = false
 vim.g.lazyvim_picker = "telescope"
--- vim.g.lazyvim_cmp = "nvim-cmp"
-vim.g.lazyvim_cmp = "blink.cmp"
 
 vim.g.loaded_node_provider = 0
 vim.g.loaded_perl_provider = 0

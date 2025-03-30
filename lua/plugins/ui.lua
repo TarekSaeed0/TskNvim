@@ -109,9 +109,6 @@ return {
 				lsp_doc_border = true,
 			},
 			routes = {},
-			popupmenu = {
-				backend = "cmp",
-			},
 			lsp = {
 				progress = {
 					view = "notify",

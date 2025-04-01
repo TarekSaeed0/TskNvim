@@ -364,7 +364,7 @@ vim.api.nvim_create_user_command("CreateProject", function(opts)
 		return
 	end
 
-	print(('Creating project "%s" from %s project template'):format(path, template))
+	print(('Creating project "%s" from %s project template\n'):format(path, template))
 
 	local project_path = arguments.path
 	local template_path = templates_path .. "/" .. arguments.template
@@ -372,7 +372,12 @@ vim.api.nvim_create_user_command("CreateProject", function(opts)
 		vim.uv.chdir(project_path)
 		local template_init_path = ".template.lua"
 		if vim.uv.fs_stat(template_init_path) then
-			dofile(template_init_path)
+			if not dofile(template_init_path) then
+				vim.notify("Failed to create project", vim.log.levels.ERROR, { title = opts.name })
+				vim.uv.chdir("..")
+				remove_directory(arguments.path)
+				return
+			end
 
 			local success, error_message = vim.uv.fs_unlink(template_init_path)
 			if not success then
@@ -381,7 +386,7 @@ vim.api.nvim_create_user_command("CreateProject", function(opts)
 					vim.log.levels.ERROR,
 					{ title = "create_project" }
 				)
-				return false
+				return
 			end
 		end
 	else

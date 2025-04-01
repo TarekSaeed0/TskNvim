@@ -5,6 +5,11 @@ return {
 		---@module 'blink.cmp'
 		---@type blink.cmp.Config
 		opts = {
+			enabled = function()
+				return not vim.list_contains({ "DressingInput" }, vim.bo.filetype)
+					and vim.bo.buftype ~= "prompt"
+					and vim.b.completion ~= false
+			end,
 			-- FIX: use vim.opt.winborder instead, when more plugins support it
 			completion = {
 				menu = { border = "rounded" },

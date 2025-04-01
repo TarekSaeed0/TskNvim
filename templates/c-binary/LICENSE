@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2021 - 2023 jothepro
+Copyright (c) #{os.date("%Y")}# #{vim.fn.system("getent passwd $USER | cut -d':' -f5 | cut -d',' -f1"):gsub("\n", "")}#
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

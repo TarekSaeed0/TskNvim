@@ -1,4 +1,3 @@
-vim.fn.system({ "git", "init" })
-vim.fn.system({ "git", "submodule", "add", "https://github.com/jothepro/doxygen-awesome-css.git" })
-
-vim.fn.system({ "cmake", "-S", ".", "-B", "build", "-DUNIT_TESTING=1" })
+return os.execute("git init") == 0
+	and os.execute("git submodule add https://github.com/jothepro/doxygen-awesome-css.git") == 0
+	and os.execute("cmake -S . -B build -DUNIT_TESTING=1") == 0

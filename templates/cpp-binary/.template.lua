@@ -1,1 +1,1 @@
-vim.fn.system({ "cmake", "-S", ".", "-B", "build" })
+return os.execute("cmake -S . -B build") == 0

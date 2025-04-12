@@ -41,7 +41,11 @@ return {
 				callback = function(args)
 					if args.data == "nvim-lint" then
 						local checkstyle = require("lint").linters.checkstyle
-						checkstyle.config_file = "/sun_checks.xml"
+
+						local config_path = vim.env.XDG_CONFIG_HOME .. "/checkstyle.xml"
+						---@diagnostic disable-next-line: inject-field
+						checkstyle.config_file = vim.uv.fs_stat(config_path) and config_path or "/sun_checks.xml"
+
 						return true
 					end
 				end,

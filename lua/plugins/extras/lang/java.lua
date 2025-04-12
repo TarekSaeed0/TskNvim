@@ -19,7 +19,11 @@ return {
 		opts = {
 			settings = {
 				java = {
-					format = { lineSplit = 80 },
+					format = {
+						settings = {
+							url = "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
+						},
+					},
 				},
 			},
 		},

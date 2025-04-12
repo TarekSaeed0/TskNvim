@@ -19,6 +19,7 @@ return {
 		---@type CatppuccinOptions
 		opts = {
 			custom_highlights = function(colors)
+				local utils = require("catppuccin.utils.colors")
 				return {
 					Normal = { link = "NormalC" },
 					NormalC = { fg = colors.text, bg = colors.base },
@@ -42,6 +43,10 @@ return {
 					LineNrAbove = { fg = colors.overlay0, bg = colors.mantle },
 					LineNrBelow = { fg = colors.overlay0, bg = colors.mantle },
 
+					CursorLineNr = { link = "LineNr" },
+					CursorLineFold = { link = "FoldColumn" },
+					CursorLineSign = { link = "SignColumn" },
+
 					SignColumn = { bg = colors.mantle },
 
 					StatusLine = { fg = colors.overlay0 },
@@ -55,6 +60,8 @@ return {
 					MsgArea = { bg = colors.mantle },
 
 					Pmenu = { link = "NormalFloat" },
+
+					Directory = { fg = colors.teal },
 
 					LspInlayHint = { bg = "NONE" },
 					DiagnosticVirtualLinesError = { link = "DiagnosticVirtualTextError" },
@@ -119,12 +126,18 @@ return {
 					SnacksDashboardFooter = { fg = colors.mauve },
 					SnacksDashboardSpecial = { fg = colors.teal },
 					SnacksImageMath = { fg = colors.text },
+					SnacksPicker = { link = "SnacksNormalC" },
+					SnacksPickerTree = { fg = colors.overlay2 },
+					SnacksPickerToggle = { fg = colors.mauve, bg = utils.darken(colors.mauve, 0.095, colors.base) },
+					SnacksScratchKey = { fg = colors.mauve, bg = utils.darken(colors.mauve, 0.095, colors.base) },
+					SnacksScratchDesc = { fg = colors.mauve },
 
 					NoiceCmdlinePopup = { link = "MsgArea" },
 					NoiceCmdlinePopupBorder = { link = "FloatBorder" },
 					NoiceCmdlinePopupBorderSearch = { link = "NoiceCmdlinePopupBorder" },
 					NoiceConfirm = { fg = colors.text, bg = colors.mantle },
 					NoiceConfirmBorder = { link = "FloatBorder" },
+					NoiceSplit = { link = "Normal" },
 
 					BlinkCmpSignatureHelpBorder = { link = "FloatBorder" },
 					BlinkCmpMenuBorder = { link = "FloatBorder" },

@@ -73,6 +73,15 @@ return {
 			notifier = {
 				margin = { right = 0 },
 			},
+			picker = {
+				---@diagnostic disable-next-line: missing-fields
+				icons = {
+					files = {
+						dir = " ",
+						dir_open = " ",
+					},
+				},
+			},
 			statuscolumn = { enabled = false },
 			terminal = {
 				---@diagnostic disable-next-line: missing-fields
@@ -116,6 +125,14 @@ return {
 			},
 			views = {
 				notify = { replace = true },
+			},
+		},
+	},
+	{
+		"echasnovski/mini.icons",
+		opts = {
+			default = {
+				directory = { glyph = "", hl = "MiniIconsCyan" },
 			},
 		},
 	},

@@ -13,6 +13,17 @@ return {
 		})
 	end,
 	{ import = "lazyvim.plugins.extras.lang.java" },
+
+	{
+		"mfussenegger/nvim-jdtls",
+		opts = {
+			settings = {
+				java = {
+					format = { lineSplit = 80 },
+				},
+			},
+		},
+	},
 	{
 		"mfussenegger/nvim-lint",
 		dependencies = {

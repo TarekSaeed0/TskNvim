@@ -149,11 +149,7 @@ return {
 						end,
 						on_click = {
 							callback = function()
-								if LazyVim.has("telescope.nvim") then
-									require("telescope.builtin").git_branches()
-								elseif LazyVim.has("fzf-lua") then
-									require("fzf-lua").git_branches()
-								end
+								Snacks.picker.git_branches()
 							end,
 							name = "heirline_git_branch_callback",
 						},
@@ -200,11 +196,7 @@ return {
 						},
 						on_click = {
 							callback = function()
-								if LazyVim.has("telescope.nvim") then
-									require("telescope.builtin").git_status()
-								elseif LazyVim.has("fzf-lua") then
-									require("fzf-lua").git_status()
-								end
+								Snacks.picker.git_status()
 							end,
 							name = "heirline_git_status_callback",
 						},
@@ -469,11 +461,7 @@ return {
 					},
 					on_click = {
 						callback = function()
-							if LazyVim.has("telescope.nvim") then
-								require("telescope.builtin").diagnostics()
-							elseif LazyVim.has("fzf-lua") then
-								require("fzf-lua").diagnostics_document()
-							end
+							Snacks.picker.diagnostics()
 						end,
 						name = "heirline_diagnostics_callback",
 					},
@@ -1036,7 +1024,8 @@ return {
 					for _, extmark in pairs(extmarks) do
 						local sign = extmark[4]
 						if
-							sign.sign_text
+							sign
+							and sign.sign_text
 							and not sign.sign_hl_group:match("^Dap")
 							and (not self.sign or (self.sign.priority < sign.priority))
 						then
@@ -1070,7 +1059,8 @@ return {
 					for _, extmark in pairs(extmarks) do
 						local sign = extmark[4]
 						if
-							sign.sign_text
+							sign
+							and sign.sign_text
 							and sign.sign_hl_group:match("^Dap")
 							and (not self.sign or (self.sign.priority < sign.priority))
 						then

@@ -21,7 +21,13 @@ return {
 				java = {
 					format = {
 						settings = {
-							url = "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
+							url = (function()
+								local config_path = vim.env.XDG_CONFIG_HOME .. "/jdtls-format.xml"
+								---@diagnostic disable-next-line: inject-field
+								if vim.uv.fs_stat(config_path) then
+									return config_path
+								end
+							end)(),
 						},
 					},
 				},

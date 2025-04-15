@@ -58,7 +58,6 @@ return {
 					char = "▏",
 				},
 			},
-			input = { enabled = false },
 			image = {
 				enabled = true,
 				doc = {
@@ -80,6 +79,7 @@ return {
 						dir = " ",
 						dir_open = " ",
 					},
+					tree = { last = "┌╴" },
 				},
 			},
 			statuscolumn = { enabled = false },
@@ -104,6 +104,12 @@ return {
 				---@diagnostic disable-next-line: missing-fields
 				zen = {
 					backdrop = { bg = "#11111b", transparent = false, blend = 0 },
+				},
+				input = {
+					width = 40,
+					relative = "cursor",
+					row = -3,
+					col = 0,
 				},
 			},
 		},

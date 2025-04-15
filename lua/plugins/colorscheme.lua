@@ -129,8 +129,13 @@ return {
 					SnacksPicker = { link = "SnacksNormalC" },
 					SnacksPickerTree = { fg = colors.overlay2 },
 					SnacksPickerToggle = { fg = colors.mauve, bg = utils.darken(colors.mauve, 0.095, colors.base) },
+					SnacksPickerPrompt = { fg = colors.teal },
 					SnacksScratchKey = { fg = colors.mauve, bg = utils.darken(colors.mauve, 0.095, colors.base) },
 					SnacksScratchDesc = { fg = colors.mauve },
+					SnacksInputNormal = { link = "MsgArea" },
+					SnacksInputBorder = { link = "FloatBorder" },
+					SnacksInputTitle = { link = "FloatTitle" },
+					SnacksInputIcon = { fg = colors.teal, bg = colors.mantle },
 
 					NoiceCmdlinePopup = { link = "MsgArea" },
 					NoiceCmdlinePopupBorder = { link = "FloatBorder" },

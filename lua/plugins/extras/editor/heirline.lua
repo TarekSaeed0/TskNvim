@@ -1190,12 +1190,6 @@ return {
 			table.insert(statuscolumn[1], foldcolumn)
 
 			return {
-				opts = {
-					colors = vim.g.colors_name
-							and vim.g.colors_name:match("catppuccin")
-							and require("catppuccin.palettes").get_palette()
-						or nil,
-				},
 				statusline = statusline,
 				tabline = tabline,
 				statuscolumn = statuscolumn,

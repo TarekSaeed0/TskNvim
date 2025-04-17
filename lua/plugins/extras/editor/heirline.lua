@@ -662,6 +662,7 @@ return {
 										return { fg = self.color, bold = false }
 									end,
 								},
+								update = { "BufAdd", "BufEnter", "BufLeave" },
 							},
 							{
 								init = function(self)
@@ -706,6 +707,7 @@ return {
 
 									self[1] = self:new(child, 2)
 								end,
+								update = { "BufAdd", "BufEnter", "BufLeave" },
 							},
 							(function()
 								local diagnostics = {
@@ -720,7 +722,7 @@ return {
 									condition = function(self)
 										return not self.is_active and #vim.diagnostic.get(self.buffer) ~= 0
 									end,
-									update = { "DiagnosticChanged", "BufEnter" },
+									update = { "DiagnosticChanged", "BufEnter", "BufLeave" },
 								}
 
 								local components = {
@@ -797,6 +799,8 @@ return {
 								condition = function(self)
 									return vim.api.nvim_get_option_value("modified", { buf = self.buffer })
 								end,
+								-- FIX: BufModifiedSet doesn't work currently
+								update = { "BufModifiedSet", "BufEnter", "BufLeave" },
 							},
 							{
 								provider = " ",
@@ -833,6 +837,8 @@ return {
 								condition = function(self)
 									return not vim.api.nvim_get_option_value("modified", { buf = self.buffer })
 								end,
+								-- FIX: BufModifiedSet doesn't work currently
+								update = { "BufModifiedSet", "BufEnter", "BufLeave" },
 							},
 							{
 								provider = "",
@@ -864,6 +870,7 @@ return {
 								end,
 								name = "heirline_buffer_callback",
 							},
+							update = { "BufEnter", "BufLeave" },
 						},
 					},
 					init = function(self)
@@ -891,6 +898,7 @@ return {
 							end
 						end
 					end,
+					update = { "BufAdd", "BufDelete", "BufEnter", "BufLeave" },
 				},
 				{
 					provider = "  ",

@@ -170,3 +170,19 @@ else
 		end,
 	})
 end
+
+vim.api.nvim_create_autocmd({ "VimEnter", "UIEnter", "BufAdd", "BufDelete" }, {
+	callback = function()
+		vim.schedule(function()
+			local buffers = vim.tbl_filter(function(buffer)
+				return vim.api.nvim_buf_is_valid(buffer) and vim.api.nvim_get_option_value("buflisted", { buf = buffer })
+			end, vim.api.nvim_list_bufs())
+
+			if #buffers > 0 then
+				vim.opt.showtabline = 2
+			else
+				vim.opt.showtabline = 0
+			end
+		end)
+	end,
+})

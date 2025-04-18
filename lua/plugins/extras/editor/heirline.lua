@@ -13,7 +13,7 @@ return {
 		"rebelot/heirline.nvim",
 		event = "VeryLazy",
 		opts = function()
-			local hl_utils = require("heirline.utils")
+			local heirline_utils = require("heirline.utils")
 
 			local statusline = { hl = "StatusLine" }
 
@@ -95,7 +95,7 @@ return {
 
 					local components = vim.split(path, separator)
 
-					local child = { flexible = 50 }
+					local child = { flexible = 30 }
 
 					child[1] = { provider = path }
 					for i = 2, #components do
@@ -107,7 +107,7 @@ return {
 
 					self[2] = self:new(child, 2)
 				end,
-				update = { "DirChanged" },
+				update = { "DirChanged", "VimResized" },
 			}
 			table.insert(statusline, cwd)
 
@@ -619,8 +619,8 @@ return {
 								provider = "",
 								hl = function(self)
 									return {
-										fg = hl_utils.get_highlight(self.is_active and "TabLineSel" or "TabLine").bg,
-										bg = hl_utils.get_highlight("TabLineFill").bg,
+										fg = heirline_utils.get_highlight(self.is_active and "TabLineSel" or "TabLine").bg,
+										bg = heirline_utils.get_highlight("TabLineFill").bg,
 									}
 								end,
 							},
@@ -666,7 +666,7 @@ return {
 										{
 											provider = table.concat(components, separator, 1, #components - 1)
 												.. (#components > 1 and separator or ""),
-											hl = { fg = hl_utils.get_highlight("TabLine").fg, bold = false },
+											hl = { fg = heirline_utils.get_highlight("TabLine").fg, bold = false },
 										},
 										{
 											provider = components[#components],
@@ -681,7 +681,7 @@ return {
 													.. separator
 													.. table.concat(components, separator, i, #components - 1)
 													.. (#components > i and separator or ""),
-												hl = { fg = hl_utils.get_highlight("TabLine").fg, bold = false },
+												hl = { fg = heirline_utils.get_highlight("TabLine").fg, bold = false },
 											},
 											{
 												provider = components[#components],
@@ -693,7 +693,7 @@ return {
 
 									self[1] = self:new(child, 2)
 								end,
-								update = { "BufAdd", "BufEnter", "BufLeave" },
+								update = { "BufAdd", "BufEnter", "BufLeave", "DirChanged", "VimResized" },
 							},
 							(function()
 								local diagnostics = {
@@ -783,7 +783,6 @@ return {
 								condition = function(self)
 									return vim.api.nvim_get_option_value("modified", { buf = self.buffer })
 								end,
-								-- FIX: BufModifiedSet doesn't work currently
 								update = { "BufModifiedSet", "BufEnter", "BufLeave" },
 							},
 							{
@@ -819,15 +818,14 @@ return {
 								condition = function(self)
 									return not vim.api.nvim_get_option_value("modified", { buf = self.buffer })
 								end,
-								-- FIX: BufModifiedSet doesn't work currently
 								update = { "BufModifiedSet", "BufEnter", "BufLeave" },
 							},
 							{
 								provider = "",
 								hl = function(self)
 									return {
-										fg = hl_utils.get_highlight(self.is_active and "TabLineSel" or "TabLine").bg,
-										bg = hl_utils.get_highlight("TabLineFill").bg,
+										fg = heirline_utils.get_highlight(self.is_active and "TabLineSel" or "TabLine").bg,
+										bg = heirline_utils.get_highlight("TabLineFill").bg,
 									}
 								end,
 							},
@@ -852,7 +850,7 @@ return {
 								end,
 								name = "heirline_buffer_callback",
 							},
-							update = { "BufEnter", "BufLeave" },
+							update = { "BufEnter", "BufLeave", "BufModifiedSet", "DirChanged", "VimResized" },
 						},
 					},
 					init = function(self)
@@ -880,7 +878,7 @@ return {
 							end
 						end
 					end,
-					update = { "BufAdd", "BufDelete", "BufEnter", "BufLeave" },
+					update = { "BufAdd", "BufDelete", "BufEnter", "BufLeave", "BufModifiedSet", "DirChanged", "VimResized" },
 				},
 				{
 					provider = "  ",
@@ -927,15 +925,17 @@ return {
 								or self.mode:sub(1, 1) == "S"
 								or ((self.mode:sub(1, 1) == "v" or self.mode:sub(1, 1) == "s") and vim.v.lnum ~= self.visual_range[1])
 							then
-								if vim.v.lnum == self.cursor_line then
-									return { bg = "surface0" }
-								else
-									return { fg = "subtext0", bg = "surface0" }
-								end
+								return { fg = "subtext0", bg = "surface0" }
 							else
-								if vim.v.lnum ~= self.cursor_line then
-									return { fg = "subtext0", bg = "mantle" }
-								end
+								return { fg = "subtext0", bg = "mantle" }
+							end
+						end
+
+						if vim.fn.foldclosed(vim.v.lnum) ~= -1 then
+							if vim.v.lnum == self.cursor_line and vim.opt.cursorline:get() then
+								return { bg = "surface0" }
+							else
+								return { fg = "subtext0", bg = "surface0" }
 							end
 						end
 
@@ -962,12 +962,6 @@ return {
 							if self.mode:sub(1, 1) ~= "\22" and self.mode:sub(1, 1) ~= "\19" then
 								return { bg = "surface0" }
 							end
-						end
-
-						if vim.v.lnum >= self.cursor_line then
-							return "LineNrBelow"
-						else
-							return "LineNrAbove"
 						end
 					end,
 					condition = function()
@@ -1129,19 +1123,20 @@ return {
 				foldinfo_T fold_info(win_T *win, linenr_T lnum);
 		  ]])
 
+			local function is_fold_start(handle, line)
+				local window = ffi.C.find_window_by_handle(handle, ffi.new("Error"))
+				local fold_info = ffi.C.fold_info(window, line)
+				return line == fold_info.fi_lnum
+			end
+
 			local foldcolumn = {
 				static = {
-					is_fold_start = function(handle, line)
-						local window = ffi.C.find_window_by_handle(handle, ffi.new("Error"))
-						local fold_info = ffi.C.fold_info(window, line)
-						return line == fold_info.fi_lnum
-					end,
 					fold_open_icon = vim.opt.fillchars:get().foldopen,
 					fold_closed_icon = vim.opt.fillchars:get().foldclose,
 				},
 				provider = function(self)
 					---@diagnostic disable-next-line: undefined-field
-					if self.is_fold_start(0, vim.v.lnum) then
+					if is_fold_start(0, vim.v.lnum) then
 						if vim.fn.foldclosed(vim.v.lnum) == -1 then
 							return self.fold_open_icon .. " "
 						else
@@ -1152,11 +1147,11 @@ return {
 					end
 				end,
 				on_click = {
-					callback = function(self, minwid)
+					callback = function(_, minwid)
 						local line = vim.fn.getmousepos().line
 
 						---@diagnostic disable-next-line: undefined-field
-						if not self.is_fold_start(minwid, line) then
+						if not is_fold_start(minwid, line) then
 							return
 						end
 
@@ -1185,20 +1180,21 @@ return {
 		end,
 		config = function(_, opts)
 			vim.opt.laststatus = 3
-			vim.opt.showtabline = 2
 			vim.opt.foldcolumn = "auto"
 			vim.opt.showcmdloc = "statusline"
 
-			require("heirline").setup(opts)
+			local heirline = require("heirline")
 
-			local hl_utils = require("heirline.utils")
+			heirline.setup(opts)
+
+			local heirline_utils = require("heirline.utils")
 			local function setup_colors()
 				local colors = {
-					foreground = hl_utils.get_highlight("StatusLine").fg,
-					background = hl_utils.get_highlight("StatusLine").bg,
-					accent = hl_utils.get_highlight("Keyword").fg,
-					green = hl_utils.get_highlight("DiagnosticOk").fg,
-					yellow = hl_utils.get_highlight("DiagnosticWarn").fg,
+					foreground = heirline_utils.get_highlight("StatusLine").fg,
+					background = heirline_utils.get_highlight("StatusLine").bg,
+					accent = heirline_utils.get_highlight("Keyword").fg,
+					green = heirline_utils.get_highlight("DiagnosticOk").fg or heirline_utils.get_highlight("String").fg,
+					yellow = heirline_utils.get_highlight("DiagnosticWarn").fg,
 				}
 
 				if vim.g.colors_name:match("catppuccin") then
@@ -1208,11 +1204,10 @@ return {
 				return colors
 			end
 
-			hl_utils.on_colorscheme(setup_colors())
-
+			heirline.load_colors(setup_colors)
 			vim.api.nvim_create_autocmd("ColorScheme", {
 				callback = function()
-					hl_utils.on_colorscheme(setup_colors())
+					heirline_utils.on_colorscheme(setup_colors)
 				end,
 			})
 		end,

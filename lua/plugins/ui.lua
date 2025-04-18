@@ -91,6 +91,36 @@ return {
 					},
 				},
 			},
+			dashboard = {
+				formats = {
+					icon = function(item)
+						if item.file and item.icon == "file" or item.icon == "directory" then
+							return Snacks.dashboard.icon(item.file, item.icon)
+						end
+						return {
+							{ "", hl = "SnacksDashboardIconLeftSeparator" },
+							{ " " .. item.icon, width = 3, hl = "icon" },
+							{ "", hl = "SnacksDashboardIconRightSeparator" },
+						}
+					end,
+					desc = function(item)
+						return { item.desc, hl = "desc" }
+					end,
+					key = function(item)
+						return {
+							{ "", hl = "SnacksDashboardKeyLeftSeparator" },
+							{ " " .. item.key, width = 3, hl = "key" },
+							{ "", hl = "SnacksDashboardKeyRightSeparator" },
+						}
+					end,
+				},
+				sections = {
+					{ section = "header" },
+					{ section = "keys" },
+					{ height = 1 },
+					{ section = "startup" },
+				},
+			},
 			styles = {
 				---@diagnostic disable-next-line: missing-fields
 				float = { backdrop = false },

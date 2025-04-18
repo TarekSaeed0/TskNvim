@@ -94,7 +94,7 @@ return {
 			local cwd = {
 				{ provider = "  " },
 				init = function(self)
-					local path = vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
+					local path = vim.fn.fnamemodify(vim.fn.getcwd(), ":~"):gsub("%%", "%%%%")
 
 					local separator = package.config:sub(1, 1)
 					local ellipsis = "…"
@@ -666,7 +666,7 @@ return {
 							},
 							{
 								init = function(self)
-									local path = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(self.buffer), ":~:.")
+									local path = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(self.buffer), ":~:."):gsub("%%", "%%%%")
 
 									local separator = package.config:sub(1, 1)
 									local ellipsis = "…"

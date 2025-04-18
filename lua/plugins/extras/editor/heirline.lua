@@ -56,9 +56,7 @@ return {
 				{
 					{
 						provider = "",
-						hl = function()
-							return { fg = hl_utils.get_highlight("Keyword").fg }
-						end,
+						hl = { fg = "accent" },
 					},
 					hl = "Normal",
 				},
@@ -74,18 +72,14 @@ return {
 							return "  " .. self.name[2] .. " "
 						end,
 					},
-					hl = function()
-						return {
-							fg = hl_utils.get_highlight("StatusLine").bg,
-							bg = hl_utils.get_highlight("Keyword").fg,
-						}
-					end,
+					hl = {
+						fg = "background",
+						bg = "accent",
+					},
 				},
 				{
 					provider = "╲",
-					hl = function()
-						return { fg = hl_utils.get_highlight("Keyword").fg }
-					end,
+					hl = { fg = "accent" },
 				},
 				hl = { bold = true },
 			}
@@ -548,9 +542,7 @@ return {
 				{
 					{
 						provider = "",
-						hl = function()
-							return { fg = hl_utils.get_highlight("StatusLine").bg }
-						end,
+						hl = { fg = "background" },
 					},
 					hl = "Normal",
 				},
@@ -569,9 +561,7 @@ return {
 							{
 								{
 									provider = "",
-									hl = function()
-										return { fg = hl_utils.get_highlight("Keyword").fg }
-									end,
+									hl = { fg = "accent" },
 								},
 								hl = "Normal",
 							},
@@ -579,18 +569,14 @@ return {
 								provider = function(self)
 									return " " .. self.title .. " "
 								end,
-								hl = function()
-									return {
-										fg = hl_utils.get_highlight("StatusLine").bg,
-										bg = hl_utils.get_highlight("Keyword").fg,
-									}
-								end,
+								hl = {
+									fg = "background",
+									bg = "accent",
+								},
 							},
 							{
 								provider = "╱",
-								hl = function()
-									return { fg = hl_utils.get_highlight("Keyword").fg }
-								end,
+								hl = { fg = "accent" },
 							},
 							{
 								provider = function(self)
@@ -774,12 +760,10 @@ return {
 							{
 								{
 									provider = "●",
-									hl = function()
-										return {
-											fg = hl_utils.get_highlight("DiagnosticOk").fg,
-											bold = false,
-										}
-									end,
+									hl = {
+										fg = "green",
+										bold = false,
+									},
 									on_click = {
 										callback = function(_, buffer)
 											vim.schedule(function()
@@ -804,12 +788,10 @@ return {
 							},
 							{
 								provider = " ",
-								hl = function()
-									return {
-										fg = hl_utils.get_highlight("DiagnosticWarn").fg,
-										bold = false,
-									}
-								end,
+								hl = {
+									fg = "yellow",
+									bold = false,
+								},
 								condition = function(self)
 									return not vim.api.nvim_get_option_value("modifiable", { buf = self.buffer })
 										or vim.api.nvim_get_option_value("readonly", { buf = self.buffer })
@@ -910,12 +892,10 @@ return {
 						end,
 						name = "heirline_buffer_new_callback",
 					},
-					hl = function()
-						return {
-							fg = hl_utils.get_highlight("DiagnosticOk").fg,
-							bold = true,
-						}
-					end,
+					hl = {
+						fg = "green",
+						bold = true,
+					},
 				},
 			}
 			table.insert(tabline, buffers)
@@ -1211,13 +1191,28 @@ return {
 
 			require("heirline").setup(opts)
 
+			local hl_utils = require("heirline.utils")
+			local function setup_colors()
+				local colors = {
+					foreground = hl_utils.get_highlight("StatusLine").fg,
+					background = hl_utils.get_highlight("StatusLine").bg,
+					accent = hl_utils.get_highlight("Keyword").fg,
+					green = hl_utils.get_highlight("DiagnosticOk").fg,
+					yellow = hl_utils.get_highlight("DiagnosticWarn").fg,
+				}
+
+				if vim.g.colors_name:match("catppuccin") then
+					colors = vim.tbl_extend("force", colors, require("catppuccin.palettes").get_palette())
+				end
+
+				return colors
+			end
+
+			hl_utils.on_colorscheme(setup_colors())
+
 			vim.api.nvim_create_autocmd("ColorScheme", {
 				callback = function()
-					if not vim.g.colors_name:match("catppuccin") then
-						return
-					end
-
-					require("heirline.utils").on_colorscheme(require("catppuccin.palettes").get_palette())
+					hl_utils.on_colorscheme(setup_colors())
 				end,
 			})
 		end,

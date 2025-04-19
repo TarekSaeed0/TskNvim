@@ -104,7 +104,10 @@ return {
 						}
 					end,
 					desc = function(item)
-						return { item.desc, hl = "desc" }
+						return {
+							{ " " .. item.desc .. " ", hl = "desc", width = 17 },
+							{ "", hl = "SnacksDashboardDescRightSeparator" },
+						}
 					end,
 					key = function(item)
 						return {

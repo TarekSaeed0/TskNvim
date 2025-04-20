@@ -958,10 +958,28 @@ return {
 				{
 					provider = "%=",
 					hl = function(self)
-						if self.visual_range and self.visual_range[1] <= vim.v.lnum and vim.v.lnum < self.visual_range[2] then
-							if self.mode:sub(1, 1) ~= "\22" and self.mode:sub(1, 1) ~= "\19" then
-								return { bg = "surface0" }
+						if self.visual_range and self.visual_range[1] <= vim.v.lnum and vim.v.lnum <= self.visual_range[2] then
+							if
+								self.mode:sub(1, 1) == "V"
+								or self.mode:sub(1, 1) == "S"
+								or ((self.mode:sub(1, 1) == "v" or self.mode:sub(1, 1) == "s") and vim.v.lnum ~= self.visual_range[1])
+							then
+								return { fg = "subtext0", bg = "surface0" }
+							else
+								return { fg = "subtext0", bg = "mantle" }
 							end
+						end
+
+						if vim.v.lnum == self.cursor_line then
+							if not self.visual_range and vim.opt.cursorline:get() then
+								return "LineNr"
+							else
+								return "LineNrNC"
+							end
+						elseif vim.v.lnum > self.cursor_line then
+							return "LineNrBelow"
+						elseif vim.v.lnum < self.cursor_line then
+							return "LineNrAbove"
 						end
 					end,
 					condition = function()

@@ -43,7 +43,6 @@ return {
 						dir = " ",
 						dir_open = " ",
 					},
-					tree = { last = "┌╴" },
 				},
 			},
 			statuscolumn = { enabled = false },

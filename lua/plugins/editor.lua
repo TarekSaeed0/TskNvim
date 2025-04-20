@@ -50,6 +50,7 @@ return {
 							end,
 							---@diagnostic disable-next-line: assign-type-mismatch
 							preview = true,
+							reverse = false,
 						},
 					},
 				},

@@ -648,7 +648,7 @@ return {
 										return { fg = self.color, bold = false }
 									end,
 								},
-								update = { "BufAdd", "BufEnter", "BufLeave" },
+								update = { "BufAdd", "BufEnter", "BufLeave", "FocusGained", "FocusLost" },
 							},
 							{
 								init = function(self)
@@ -693,7 +693,7 @@ return {
 
 									self[1] = self:new(child, 2)
 								end,
-								update = { "BufAdd", "BufEnter", "BufLeave", "DirChanged", "VimResized" },
+								update = { "BufAdd", "BufEnter", "BufLeave", "DirChanged", "VimResized", "FocusGained", "FocusLost" },
 							},
 							(function()
 								local diagnostics = {
@@ -818,7 +818,7 @@ return {
 								condition = function(self)
 									return not vim.api.nvim_get_option_value("modified", { buf = self.buffer })
 								end,
-								update = { "BufModifiedSet", "BufEnter", "BufLeave" },
+								update = { "BufModifiedSet", "BufEnter", "BufLeave", "FocusGained", "FocusLost" },
 							},
 							{
 								provider = "",
@@ -850,7 +850,15 @@ return {
 								end,
 								name = "heirline_buffer_callback",
 							},
-							update = { "BufEnter", "BufLeave", "BufModifiedSet", "DirChanged", "VimResized" },
+							update = {
+								"BufEnter",
+								"BufLeave",
+								"BufModifiedSet",
+								"DirChanged",
+								"VimResized",
+								"FocusGained",
+								"FocusLost",
+							},
 						},
 					},
 					init = function(self)
@@ -878,7 +886,17 @@ return {
 							end
 						end
 					end,
-					update = { "BufAdd", "BufDelete", "BufEnter", "BufLeave", "BufModifiedSet", "DirChanged", "VimResized" },
+					update = {
+						"BufAdd",
+						"BufDelete",
+						"BufEnter",
+						"BufLeave",
+						"BufModifiedSet",
+						"DirChanged",
+						"VimResized",
+						"FocusGained",
+						"FocusLost",
+					},
 				},
 				{
 					provider = "  ",
@@ -918,74 +936,49 @@ return {
 					end
 				end,
 				{
-					hl = function(self)
-						if self.visual_range and self.visual_range[1] <= vim.v.lnum and vim.v.lnum <= self.visual_range[2] then
-							if
-								self.mode:sub(1, 1) == "V"
-								or self.mode:sub(1, 1) == "S"
-								or ((self.mode:sub(1, 1) == "v" or self.mode:sub(1, 1) == "s") and vim.v.lnum ~= self.visual_range[1])
-							then
-								return { fg = "subtext0", bg = "surface0" }
-							else
-								return { fg = "subtext0", bg = "mantle" }
-							end
-						end
-
-						if vim.fn.foldclosed(vim.v.lnum) ~= -1 then
-							if vim.v.lnum == self.cursor_line and vim.opt.cursorline:get() then
-								return { bg = "surface0" }
-							else
-								return { fg = "subtext0", bg = "surface0" }
-							end
-						end
-
-						if vim.v.lnum == self.cursor_line then
-							if not self.visual_range and vim.opt.cursorline:get() then
-								return "LineNr"
-							else
-								return "LineNrNC"
-							end
-						elseif vim.v.lnum > self.cursor_line then
-							return "LineNrBelow"
-						elseif vim.v.lnum < self.cursor_line then
-							return "LineNrAbove"
-						end
-					end,
 					condition = function()
 						return vim.v.virtnum == 0
 					end,
 				},
 				{
 					provider = "%=",
-					hl = function(self)
-						if self.visual_range and self.visual_range[1] <= vim.v.lnum and vim.v.lnum <= self.visual_range[2] then
-							if
-								self.mode:sub(1, 1) == "V"
-								or self.mode:sub(1, 1) == "S"
-								or ((self.mode:sub(1, 1) == "v" or self.mode:sub(1, 1) == "s") and vim.v.lnum ~= self.visual_range[1])
-							then
-								return { fg = "subtext0", bg = "surface0" }
-							else
-								return { fg = "subtext0", bg = "mantle" }
-							end
-						end
-
-						if vim.v.lnum == self.cursor_line then
-							if not self.visual_range and vim.opt.cursorline:get() then
-								return "LineNr"
-							else
-								return "LineNrNC"
-							end
-						elseif vim.v.lnum > self.cursor_line then
-							return "LineNrBelow"
-						elseif vim.v.lnum < self.cursor_line then
-							return "LineNrAbove"
-						end
-					end,
 					condition = function()
 						return vim.v.virtnum ~= 0
 					end,
 				},
+				hl = function(self)
+					if self.visual_range and self.visual_range[1] <= vim.v.lnum and vim.v.lnum <= self.visual_range[2] then
+						if
+							self.mode:sub(1, 1) == "V"
+							or self.mode:sub(1, 1) == "S"
+							or ((self.mode:sub(1, 1) == "v" or self.mode:sub(1, 1) == "s") and vim.v.lnum ~= self.visual_range[1])
+						then
+							return { fg = "subtext0", bg = "surface0" }
+						else
+							return { fg = "subtext0", bg = "mantle" }
+						end
+					end
+
+					if vim.fn.foldclosed(vim.v.lnum) ~= -1 then
+						if vim.v.lnum == self.cursor_line and vim.opt.cursorline:get() then
+							return { bg = "surface0" }
+						else
+							return { fg = "subtext0", bg = "surface0" }
+						end
+					end
+
+					if vim.v.lnum == self.cursor_line then
+						if not self.visual_range and vim.opt.cursorline:get() then
+							return "LineNr"
+						else
+							return "LineNrNC"
+						end
+					elseif vim.v.lnum > self.cursor_line then
+						return "LineNrBelow"
+					elseif vim.v.lnum < self.cursor_line then
+						return "LineNrAbove"
+					end
+				end,
 				condition = function(self)
 					if vim.opt.buftype:get() == "help" then
 						return false

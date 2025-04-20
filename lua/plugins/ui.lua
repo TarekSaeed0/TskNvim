@@ -1,41 +1,5 @@
 return {
 	{
-		"snacks.nvim",
-		---@module "snacks"
-		---@type snacks.Config
-		opts = {
-			dashboard = {
-				preset = {
-					header = [[                ██  ██  ██  ██████                
-                ██  ██  ██      ██                
-                ██  ██  ██  ██████                
-                ██  ██  ██  ██  ██                
-        ██████  ██  ██  ██  ██████  ██████        
-        ██  ██  ██  ██  ██  ██      ██  ██        
-        ██████████████  ██  ██████  ██████        
-                            ██      ██            
-██████████  ██  ██  ██  ██  ██████  ██████████████
-██  ██  ██  ██  ██  ██  ██  ██      ██            
-██  ██████████████████████  ██████  ██████████████
-                            ██                    
-██████████████  ██████  ██  ██████  ██████████████
-                    ██                            
-██████████████  ██████  ██████████████████████  ██
-            ██      ██  ██  ██  ██  ██  ██  ██  ██
-██████████████  ██████  ██  ██  ██  ██  ██████████
-            ██      ██                            
-        ██████  ██████  ██  ██████████████        
-        ██  ██      ██  ██  ██  ██  ██  ██        
-        ██████  ██████  ██  ██  ██  ██████        
-                ██  ██  ██  ██  ██                
-                ██████  ██  ██  ██                
-                ██      ██  ██  ██                
-                ██████  ██  ██  ██                ]],
-				},
-			},
-		},
-	},
-	{
 		"williamboman/mason.nvim",
 		opts = {
 			ui = {
@@ -92,6 +56,48 @@ return {
 				},
 			},
 			dashboard = {
+				preset = {
+					---@type snacks.dashboard.Item[]
+					keys = {
+						{ icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+						{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+						{ icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+						{ icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+						{
+							icon = " ",
+							key = "c",
+							desc = "Config",
+							action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})",
+						},
+						{ icon = " ", key = "s", desc = "Restore Session", section = "session" },
+						{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
+					},
+					header = [[                ██  ██  ██  ██████                
+                ██  ██  ██      ██                
+                ██  ██  ██  ██████                
+                ██  ██  ██  ██  ██                
+        ██████  ██  ██  ██  ██████  ██████        
+        ██  ██  ██  ██  ██  ██      ██  ██        
+        ██████████████  ██  ██████  ██████        
+                            ██      ██            
+██████████  ██  ██  ██  ██  ██████  ██████████████
+██  ██  ██  ██  ██  ██  ██  ██      ██            
+██  ██████████████████████  ██████  ██████████████
+                            ██                    
+██████████████  ██████  ██  ██████  ██████████████
+                    ██                            
+██████████████  ██████  ██████████████████████  ██
+            ██      ██  ██  ██  ██  ██  ██  ██  ██
+██████████████  ██████  ██  ██  ██  ██  ██████████
+            ██      ██                            
+        ██████  ██████  ██  ██████████████        
+        ██  ██      ██  ██  ██  ██  ██  ██        
+        ██████  ██████  ██  ██  ██  ██████        
+                ██  ██  ██  ██  ██                
+                ██████  ██  ██  ██                
+                ██      ██  ██  ██                
+                ██████  ██  ██  ██                ]],
+				},
 				formats = {
 					icon = function(item)
 						if item.file and item.icon == "file" or item.icon == "directory" then
@@ -116,12 +122,64 @@ return {
 							{ "", hl = "SnacksDashboardKeyRightSeparator" },
 						}
 					end,
+					footer = function(item)
+						return { item.footer, align = "center" }
+					end,
 				},
 				sections = {
 					{ section = "header" },
+					---@param opts? {icon?:string}
+					---@return snacks.dashboard.Section?
+					function(opts)
+						opts = opts or {}
+						Snacks.dashboard.lazy_stats = Snacks.dashboard.lazy_stats
+								and Snacks.dashboard.lazy_stats.startuptime > 0
+								and Snacks.dashboard.lazy_stats
+							or require("lazy.stats").stats()
+						local ms = (math.floor(Snacks.dashboard.lazy_stats.startuptime * 100 + 0.5) / 100)
+						local icon = opts.icon or "󱐋 "
+						return {
+							align = "center",
+							text = {
+								{ "", hl = "SnacksDashboardFooterLeftSeparator" },
+								{
+									" "
+										.. icon
+										.. "Neovim loaded "
+										.. Snacks.dashboard.lazy_stats.loaded
+										.. "/"
+										.. Snacks.dashboard.lazy_stats.count
+										.. " plugins in "
+										.. ms
+										.. "ms ",
+									hl = "footer",
+								},
+								{ "", hl = "SnacksDashboardFooterRightSeparator" },
+							},
+						}
+					end,
+					{ height = 1 },
 					{ section = "keys" },
 					{ height = 1 },
-					{ section = "startup" },
+					---@return snacks.dashboard.Section?
+					function()
+						local version = vim.version()
+						return {
+							align = "center",
+							text = {
+								{ "", hl = "SnacksDashboardFooterLeftSeparator" },
+								{
+									("  Neovim" .. (version.prerelease and " nightly" or "") .. " v%d.%d.%d "):format(
+										version.major,
+										version.minor,
+										version.patch
+									),
+									hl = "footer",
+								},
+								{ "", hl = "SnacksDashboardFooterRightSeparator" },
+							},
+						}
+					end,
 				},
 			},
 			styles = {

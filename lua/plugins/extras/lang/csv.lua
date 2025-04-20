@@ -11,7 +11,9 @@ return {
 			vim.api.nvim_create_autocmd("FileType", {
 				pattern = "csv",
 				callback = function()
-					require("csvview").enable()
+					vim.schedule(function()
+						require("csvview").enable()
+					end)
 				end,
 			})
 		end,

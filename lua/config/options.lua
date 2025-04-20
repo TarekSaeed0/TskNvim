@@ -40,8 +40,4 @@ vim.g.vimtex_compiler_latexmk = {
 	},
 }
 
-vim.filetype.add({
-	pattern = { ["${XDG_CONFIG_HOME}/hypr/.*%.conf"] = "hyprlang" },
-})
-
 require("config.usercmds")

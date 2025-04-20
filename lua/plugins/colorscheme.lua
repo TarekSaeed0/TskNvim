@@ -200,8 +200,18 @@ return {
 					texOptSep = { link = "Normal" },
 
 					CsvViewDelimiter = { link = "WinSeparator" },
-					CsvViewHeaderLine = { bg = colors.mantle },
+					CsvViewHeaderLine = { fg = colors.teal, bg = colors.mantle, bold = true },
 					CsvViewStickyHeaderSeparator = { link = "WinSeparator" },
+
+					csvCol0 = { link = "Normal" },
+					csvCol1 = { link = "Normal" },
+					csvCol2 = { link = "Normal" },
+					csvCol3 = { link = "Normal" },
+					csvCol4 = { link = "Normal" },
+					csvCol5 = { link = "Normal" },
+					csvCol6 = { link = "Normal" },
+					csvCol7 = { link = "Normal" },
+					csvCol8 = { link = "Normal" },
 				}
 			end,
 		},

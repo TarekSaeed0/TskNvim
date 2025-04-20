@@ -198,6 +198,10 @@ return {
 					UfoFoldedEllipsis = { fg = colors.overlay0, bg = "NONE" },
 
 					texOptSep = { link = "Normal" },
+
+					CsvViewDelimiter = { link = "WinSeparator" },
+					CsvViewHeaderLine = { bg = colors.mantle },
+					CsvViewStickyHeaderSeparator = { link = "WinSeparator" },
 				}
 			end,
 		},

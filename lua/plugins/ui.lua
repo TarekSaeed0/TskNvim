@@ -203,6 +203,67 @@ return {
 				},
 			},
 		},
+		config = function(_, opts)
+			-- HACK: remove empty space after icon
+			---@param self snacks.dashboard
+			---@param item snacks.dashboard.Item
+			---@diagnostic disable-next-line: inject-field
+			require("snacks.dashboard").Dashboard.format = function(self, item)
+				local width = item.indent or 0
+
+				---@param fields string[]
+				---@param opts {align?:"left"|"center"|"right", padding?:number, flex?:boolean, multi?:boolean}
+				local function find(fields, opts)
+					local flex = opts.flex and math.max(0, self.opts.width - width) or nil
+					local texts = {} ---@type snacks.dashboard.Text[]
+					for _, k in ipairs(fields) do
+						if item[k] then
+							vim.list_extend(texts, self:texts(self:format_field(item, k, flex)))
+							if not opts.multi then
+								break
+							end
+						end
+					end
+					if #texts == 0 then
+						return { width = 0 }
+					end
+					local block = self:block(texts)
+					block.width = block.width + (opts.padding or 0)
+					width = width + block.width
+					return block
+				end
+
+				local block = item.text and self:block(self:texts(item.text))
+				local left = block and { width = 0 } or find({ "icon" }, { align = "left" })
+				local right = block and { width = 0 } or find({ "label", "key" }, { align = "right" })
+				local center = block or find({ "header", "footer", "title", "desc", "file" }, { flex = true, multi = true })
+
+				local padding = self:padding(item)
+				local ret = { width = self.opts.width } ---@type snacks.dashboard.Block
+				for l = 1, math.max(#left, #center, #right, 1) + padding[1] do
+					ret[l] = { width = 0 }
+					left[l] = left[l] or { width = 0 }
+					right[l] = right[l] or { width = 0 }
+					center[l] = center[l] or { width = 0 }
+					self:align(left[l], left.width, "left")
+					if item.indent then
+						self:align(left[l], left[l].width + item.indent, "right")
+					end
+					self:align(right[l], right.width, "right")
+					self:align(center[l], self.opts.width - left[l].width - right[l].width, item.align)
+					vim.list_extend(ret[l], left[l])
+					vim.list_extend(ret[l], center[l])
+					vim.list_extend(ret[l], right[l])
+					ret[l].width = left[l].width + center[l].width + right[l].width
+				end
+				for _ = 1, padding[2] do
+					table.insert(ret, 1, { width = self.opts.width })
+				end
+				return ret
+			end
+
+			require("snacks").setup(opts)
+		end,
 	},
 	{
 		"folke/noice.nvim",

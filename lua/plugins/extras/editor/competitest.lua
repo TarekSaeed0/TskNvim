@@ -41,6 +41,8 @@ return {
 		---@type competitest.Config
 		---@diagnostic disable-next-line: missing-fields
 		opts = {
+			---@diagnostic disable-next-line: missing-fields
+			runner_ui = { show_nu = false },
 			template_file = vim.fn.stdpath("config") .. "/templates/competitive_programming/src/main.cpp",
 			testcases_directory = "testcases",
 			received_files_extension = "cpp",
@@ -57,16 +59,6 @@ return {
 			received_contests_prompt_directory = false,
 			received_contests_prompt_extension = false,
 		},
-		config = function(_, opts)
-			require("competitest").setup(opts)
-
-			vim.api.nvim_create_autocmd("FileType", {
-				pattern = "CompetiTest",
-				callback = function()
-					vim.opt_local.number = false
-				end,
-			})
-		end,
 		keys = {
 			{ "<localleader>C", "", desc = "+competitest" },
 			{ "<localleader>Cp", "<cmd>CompetiTest receive problem<cr>", desc = "Receive problem" },

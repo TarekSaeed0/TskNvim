@@ -1,5 +1,5 @@
 local function snake_case(s)
-	return s:gsub("(%l)(%u)", "%1_%2"):gsub("[^a-zA-Z0-9_]", "_"):gsub("_*$", ""):lower()
+	return s:gsub("(%l)(%u)", "%1_%2"):gsub("[^a-zA-Z0-9_]", "_"):gsub("_+", "_"):gsub("_*$", ""):lower()
 end
 
 ---@param task table

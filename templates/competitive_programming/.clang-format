@@ -1,4 +1,5 @@
 ColumnLimit: 100
+
 UseTab: Always
 IndentWidth: 4
 TabWidth: 4
@@ -14,6 +15,8 @@ AllowShortLoopsOnASingleLine: false
 
 IndentCaseLabels: true
   
+Cpp11BracedListStyle: false
+
 AllowAllArgumentsOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
 BinPackArguments: false

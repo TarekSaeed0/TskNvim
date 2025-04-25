@@ -1,8 +1,10 @@
 return {
 	{
 		"ahmedkhalf/project.nvim",
-		opts = {
-			manual_mode = false,
-		},
+		opts = function()
+			local patterns = vim.deepcopy(require("project_nvim.config").defaults.patterns)
+			table.insert(patterns, "*")
+			return { patterns = patterns }
+		end,
 	},
 }

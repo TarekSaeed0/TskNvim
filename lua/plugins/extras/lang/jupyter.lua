@@ -33,25 +33,26 @@ return {
 					local runner = require("quarto.runner")
 
 					vim.keymap.set("n", "<localleader>q", "", { desc = "+quarto", silent = true, buffer = true })
-					vim.keymap.set("n", "<localleader>qc", runner.run_cell, { desc = "run cell", silent = true, buffer = true })
+
+					vim.keymap.set("n", "<localleader>qc", runner.run_cell, { desc = "Run cell", silent = true, buffer = true })
 					vim.keymap.set(
 						"n",
 						"<localleader>qa",
 						runner.run_above,
-						{ desc = "run cell and above", silent = true, buffer = true }
+						{ desc = "Run cell and above", silent = true, buffer = true }
 					)
 					vim.keymap.set(
 						"n",
 						"<localleader>qA",
 						runner.run_all,
-						{ desc = "run all cells", silent = true, buffer = true }
+						{ desc = "Run all cells", silent = true, buffer = true }
 					)
 					vim.keymap.set("n", "<localleader>ql", runner.run_line, { desc = "run line", silent = true, buffer = true })
 					vim.keymap.set(
 						"v",
 						"<localleader>q",
 						runner.run_range,
-						{ desc = "run visual range", silent = true, buffer = true }
+						{ desc = "Run visual range", silent = true, buffer = true }
 					)
 				end,
 				desc = "Initialize the plugin",

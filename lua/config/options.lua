@@ -2,7 +2,14 @@
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
 
+-- disable some features for performance on termux
 vim.g.tsknvim_performance = vim.fn.executable("termux-setup-storage") == 1
+
+vim.opt.guifont = "FiraCode Nerd Font:h10"
+
+if vim.g.neovide then
+	vim.g.neovide_floating_corner_radius = 0.75
+end
 
 vim.g.lazyvim_check_order = false
 vim.g.lazyvim_picker = "snacks"

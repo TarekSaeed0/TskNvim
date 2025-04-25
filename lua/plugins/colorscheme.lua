@@ -212,6 +212,10 @@ return {
 					csvCol6 = { link = "Normal" },
 					csvCol7 = { link = "Normal" },
 					csvCol8 = { link = "Normal" },
+
+					CompetiTestCorrect = { fg = colors.green },
+					CompetiTestWarning = { fg = colors.yellow },
+					CompetiTestWrong = { fg = colors.red, bold = true },
 				}
 			end,
 		},

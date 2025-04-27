@@ -251,6 +251,14 @@ return {
 		end,
 	},
 	{
+
+		"folke/snacks.nvim",
+		opts = function(_, opts)
+			--- HACK: fix duplicate Projects option in dashboard
+			table.remove(opts.dashboard.preset.keys, 3)
+		end,
+	},
+	{
 		"folke/noice.nvim",
 		enabled = not vim.g.tsknvim_performance,
 		opts = {

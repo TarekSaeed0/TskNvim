@@ -14,46 +14,6 @@ return {
 		---@module "snacks"
 		---@type snacks.Config
 		opts = {
-			indent = {
-				indent = {
-					char = "▏",
-				},
-				scope = {
-					char = "▏",
-				},
-			},
-			image = {
-				enabled = true,
-				doc = {
-					float = false,
-				},
-				math = {
-					latex = {
-						font_size = "normalsize",
-					},
-				},
-			},
-			notifier = {
-				margin = { right = 0 },
-			},
-			picker = {
-				---@diagnostic disable-next-line: missing-fields
-				icons = {
-					files = {
-						dir = " ",
-						dir_open = " ",
-					},
-				},
-			},
-			statuscolumn = { enabled = false },
-			terminal = {
-				---@diagnostic disable-next-line: missing-fields
-				win = {
-					wo = {
-						winbar = "",
-					},
-				},
-			},
 			dashboard = {
 				formats = {
 					icon = function(item)
@@ -139,6 +99,56 @@ return {
 					end,
 				},
 			},
+			indent = {
+				indent = {
+					char = "▏",
+				},
+				scope = {
+					char = "▏",
+				},
+			},
+			image = {
+				enabled = true,
+				doc = {
+					float = false,
+				},
+				math = {
+					latex = {
+						font_size = "normalsize",
+					},
+				},
+			},
+			notifier = {
+				margin = { right = 0 },
+			},
+			picker = {
+				---@diagnostic disable-next-line: missing-fields
+				icons = {
+					files = {
+						dir = " ",
+						dir_open = " ",
+					},
+				},
+			},
+			statuscolumn = { enabled = false },
+			terminal = {
+				---@diagnostic disable-next-line: missing-fields
+				win = {
+					wo = {
+						winbar = "",
+					},
+				},
+			},
+			zen = {
+				toggles = {
+					line_number = false,
+					relative_number = false,
+					inlay_hints = false,
+					signcolumn = false,
+					foldcolumn = false,
+					indent = false,
+				},
+			},
 			styles = {
 				---@diagnostic disable-next-line: missing-fields
 				float = { backdrop = false },
@@ -221,6 +231,36 @@ return {
 			end
 
 			require("snacks").setup(opts)
+
+			Snacks.toggle.new({
+				id = "signcolumn",
+				name = "Enable/Disable Sign Column",
+				get = function()
+					return not vim.opt.signcolumn:get():match("no")
+				end,
+				set = function(state)
+					if state then
+						vim.opt.signcolumn = "yes"
+					else
+						vim.opt.signcolumn = "no"
+					end
+				end,
+			})
+
+			Snacks.toggle.new({
+				id = "foldcolumn",
+				name = "Enable/Disable Fold Column",
+				get = function()
+					return not vim.opt.foldcolumn:get():match("no")
+				end,
+				set = function(state)
+					if state then
+						vim.opt.foldcolumn = "auto"
+					else
+						vim.opt.foldcolumn = "0"
+					end
+				end,
+			})
 		end,
 	},
 	{

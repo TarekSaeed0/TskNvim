@@ -231,17 +231,22 @@ return {
 					},
 				},
 				{
-					provider = function()
-						local search = vim.fn.searchcount()
+					init = function(self)
+						local success, search = pcall(vim.fn.searchcount)
+						if success and search.total then
+							self.search = search
+						end
+					end,
+					provider = function(self)
 						return "  "
 							.. string.format(
-								"%" .. tostring(math.min(search.total, search.maxcount)):len() .. "d/%d",
-								search.current,
-								math.min(search.total, search.maxcount)
+								"%" .. tostring(math.min(self.search.total, self.search.maxcount)):len() .. "d/%d",
+								self.search.current,
+								math.min(self.search.total, self.search.maxcount)
 							)
 					end,
 					condition = function()
-						return vim.v.hlsearch ~= 0 and not vim.tbl_isempty(vim.fn.searchcount())
+						return vim.v.hlsearch ~= 0
 					end,
 				},
 				{

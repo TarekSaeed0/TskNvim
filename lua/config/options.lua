@@ -31,6 +31,7 @@ vim.opt.pumblend = 0
 -- vim.opt.winborder = "rounded"
 
 vim.opt.fillchars:append({ foldopen = "", foldclose = "", msgsep = "─" })
+vim.opt.listchars:append({ tab = "   " })
 
 vim.g.vimtex_syntax_conceal_disable = 1
 vim.g.vimtex_compiler_progname = "nvr"

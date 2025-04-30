@@ -144,9 +144,10 @@ return {
 					line_number = false,
 					relative_number = false,
 					inlay_hints = false,
+					indent = false,
 					signcolumn = false,
 					foldcolumn = false,
-					indent = false,
+					tmuxstatusbar = false,
 				},
 			},
 			styles = {
@@ -258,6 +259,47 @@ return {
 						vim.opt.foldcolumn = "auto"
 					else
 						vim.opt.foldcolumn = "0"
+					end
+				end,
+			})
+
+			local function is_tmux_status_bar_shown()
+				local object = vim.system({ "tmux", "show-option", "status" }, { text = true }):wait()
+				return object.code == 0 and object.stdout:match("on")
+			end
+
+			local function hide_tmux_status_bar()
+				vim.system({ "tmux", "set", "status", "off" })
+			end
+
+			local function show_tmux_status_bar()
+				vim.system({ "tmux", "set", "status", "on" })
+			end
+
+			Snacks.toggle.new({
+				id = "tmuxstatusbar",
+				name = "Enable/Disable Fold Column",
+				get = is_tmux_status_bar_shown,
+				set = function(state)
+					if state then
+						show_tmux_status_bar()
+						vim.api.nvim_del_augroup_by_name("tmux_status_bar_reshow")
+						pcall(vim.api.nvim_del_augroup_by_name, "tmux_status_bar_rehide")
+					else
+						hide_tmux_status_bar()
+						vim.api.nvim_create_autocmd({ "VimLeavePre", "FocusLost", "VimSuspend" }, {
+							group = vim.api.nvim_create_augroup("tmux_status_bar_reshow", { clear = true }),
+							callback = function()
+								show_tmux_status_bar()
+								vim.api.nvim_create_autocmd({ "FocusGained", "VimResume" }, {
+									group = vim.api.nvim_create_augroup("tmux_status_bar_rehide", { clear = true }),
+									callback = function()
+										show_tmux_status_bar()
+										return true
+									end,
+								})
+							end,
+						})
 					end
 				end,
 			})

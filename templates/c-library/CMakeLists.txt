@@ -38,5 +38,5 @@ if(UNIT_TESTING)
 
 	include(AddCMockaTest)
 
-	add_subdirectory(test)
+	add_subdirectory(tests)
 endif(UNIT_TESTING)

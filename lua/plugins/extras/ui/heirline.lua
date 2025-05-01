@@ -1195,7 +1195,6 @@ return {
 			}
 		end,
 		config = function(_, opts)
-			vim.opt.laststatus = 3
 			vim.opt.foldcolumn = "auto"
 			vim.opt.showcmdloc = "statusline"
 

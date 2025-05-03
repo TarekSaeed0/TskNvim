@@ -44,7 +44,9 @@ return {
 					end,
 				},
 				sections = {
-					{ section = "header" },
+					function(self)
+						return { header = self.opts.preset.header, padding = 1 }
+					end,
 					---@param opts? {icon?:string}
 					---@return snacks.dashboard.Section?
 					function(opts)
@@ -295,7 +297,6 @@ return {
 									group = vim.api.nvim_create_augroup("tmux_status_bar_rehide", { clear = true }),
 									callback = function()
 										show_tmux_status_bar()
-										return true
 									end,
 								})
 							end,
@@ -397,7 +398,7 @@ return {
 			local header = headers[math.random(#headers)]
 
 			if
-				select(2, header.big:gsub("\n", "\n")) + 4 + #opts.dashboard.preset.keys + 2 <= vim.opt.lines:get()
+				select(2, header.big:gsub("\n", "\n")) + 3 + #opts.dashboard.preset.keys + 2 <= vim.opt.lines:get()
 				and vim.fn.strdisplaywidth(header.big:match("([^\r\n]*)")) < vim.opt.columns:get()
 			then
 				opts.dashboard.preset.header = header.big

@@ -296,7 +296,7 @@ return {
 								vim.api.nvim_create_autocmd({ "FocusGained", "VimResume" }, {
 									group = vim.api.nvim_create_augroup("tmux_status_bar_rehide", { clear = true }),
 									callback = function()
-										show_tmux_status_bar()
+										hide_tmux_status_bar()
 									end,
 								})
 							end,

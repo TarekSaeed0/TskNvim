@@ -1205,11 +1205,13 @@ return {
 			local heirline_utils = require("heirline.utils")
 			local function setup_colors()
 				local colors = {
-					foreground = heirline_utils.get_highlight("StatusLine").fg,
-					background = heirline_utils.get_highlight("StatusLine").bg,
-					accent = heirline_utils.get_highlight("Keyword").fg,
-					green = heirline_utils.get_highlight("DiagnosticOk").fg or heirline_utils.get_highlight("String").fg,
-					yellow = heirline_utils.get_highlight("DiagnosticWarn").fg,
+					foreground = heirline_utils.get_highlight("StatusLine").fg or "NONE",
+					background = heirline_utils.get_highlight("StatusLine").bg or "NONE",
+					accent = heirline_utils.get_highlight("Keyword").fg or "NONE",
+					green = heirline_utils.get_highlight("DiagnosticOk").fg
+						or heirline_utils.get_highlight("String").fg
+						or "NONE",
+					yellow = heirline_utils.get_highlight("DiagnosticWarn").fg or "NONE",
 				}
 
 				if vim.g.colors_name:match("catppuccin") then

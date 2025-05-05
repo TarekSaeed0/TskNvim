@@ -73,8 +73,8 @@ return {
 						end,
 					},
 					hl = {
-						fg = "background",
-						bg = "accent",
+						fg = "accent",
+						reverse = true,
 					},
 				},
 				{

@@ -39,6 +39,19 @@ if not vim.g.tsknvim_performance then
 		end,
 	})
 
+	vim.api.nvim_create_autocmd("ColorScheme", {
+		callback = function()
+			---@diagnostic disable-next-line: param-type-mismatch
+			vim.api.nvim_set_hl(0, "NormalC", vim.api.nvim_get_hl(0, { name = "Normal" }))
+			vim.api.nvim_set_hl(0, "Normal", { link = "NormalC" })
+			---@diagnostic disable-next-line: param-type-mismatch
+			vim.api.nvim_set_hl(0, "NormalFloatC", vim.api.nvim_get_hl(0, { name = "NormalFloat" }))
+			---@diagnostic disable-next-line: param-type-mismatch
+			vim.api.nvim_set_hl(0, "NormalFloatNC", vim.api.nvim_get_hl(0, { name = "NormalNC" }))
+			---@diagnostic disable-next-line: param-type-mismatch
+			vim.api.nvim_set_hl(0, "NormalFloat", { link = "NormalFloatC" })
+		end,
+	})
 	vim.defer_fn(function()
 		vim.api.nvim_set_decoration_provider(
 			vim.api.nvim_create_namespace("tsknvim_highlight_non_current_floating_windows"),

@@ -269,38 +269,26 @@ return {
 
 			if LazyVim.has("codeium.nvim") then
 				local codeium = {
+					init = function(self)
+						self.status = require("codeium.virtual_text").status()
+					end,
 					provider = function(self)
-						return "󰘦 " .. self.status
+						if self.status.state == "completions" then
+							return ("󰘦 %" .. tostring(self.status.total):len() .. "d/%d:%"):format(
+								self.status.current,
+								self.status.total
+							)
+						else
+							return "󰘦 "
+						end
 					end,
 					hl = function(self)
-						if self.status == "error" then
-							return "DiagnosticError"
-						elseif self.status == "pending" then
+						if self.status == "waiting" then
 							return "DiagnosticWarn"
 						end
 					end,
-					condition = function(self)
-						if not LazyVim.is_loaded("nvim-cmp") then
-							return false
-						end
-
-						local source = vim.iter(require("cmp").core.sources):find(function(source)
-							return source.name == "codeium"
-						end)
-						if source then
-							if source.source:is_available() then
-								self.started = true
-								if source.status == source.SourceStatus.FETCHING then
-									self.status = "pending"
-								else
-									self.status = "okay"
-								end
-							else
-								self.status = self.started and "error" or nil
-							end
-						end
-
-						return self.status
+					condition = function()
+						return LazyVim.is_loaded("blink.cmp")
 					end,
 				}
 				table.insert(statusline, codeium)

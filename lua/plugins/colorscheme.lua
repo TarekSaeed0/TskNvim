@@ -21,15 +21,10 @@ return {
 			custom_highlights = function(colors)
 				local utils = require("catppuccin.utils.colors")
 				return {
-					Normal = { link = "NormalC" },
-					NormalC = { fg = colors.text, bg = colors.base },
+					Normal = { fg = colors.text, bg = colors.base },
 					NormalNC = { fg = colors.overlay0, bg = colors.mantle },
 
-					NormalFloat = {
-						link = vim.g.tsknvim_performance and "NormalFloatNC" or "NormalFloatC",
-					},
-					NormalFloatC = { fg = colors.text, bg = colors.base },
-					NormalFloatNC = { fg = colors.overlay0, bg = colors.mantle },
+					NormalFloat = { fg = colors.text, bg = colors.base },
 
 					FloatBorder = { fg = colors.overlay0, bg = colors.mantle },
 					FloatTitle = { fg = colors.mantle, bg = colors.mauve, bold = true },

@@ -284,9 +284,9 @@ return {
 				get = is_tmux_status_bar_shown,
 				set = function(state)
 					if state then
-						show_tmux_status_bar()
 						vim.api.nvim_del_augroup_by_name("tmux_status_bar_reshow")
 						pcall(vim.api.nvim_del_augroup_by_name, "tmux_status_bar_rehide")
+						show_tmux_status_bar()
 					else
 						hide_tmux_status_bar()
 						vim.api.nvim_create_autocmd({ "VimLeavePre", "FocusLost", "VimSuspend" }, {

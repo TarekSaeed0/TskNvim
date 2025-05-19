@@ -18,19 +18,6 @@ return {
 			local statusline = { hl = "StatusLine" }
 
 			local mode = {
-				init = function(self)
-					local mode = vim.api.nvim_get_mode().mode
-					self.name = vim
-						.iter(mode:gmatch("."))
-						:enumerate()
-						:map(function(i)
-							return mode:sub(1, -i)
-						end)
-						:map(function(s)
-							return self.names[s]
-						end)
-						:next() or mode
-				end,
 				static = {
 					names = {
 						n = { "NORMAL", "N" },
@@ -53,6 +40,19 @@ return {
 						t = { "TERMINAL", "T" },
 					},
 				},
+				init = function(self)
+					local mode = vim.api.nvim_get_mode().mode
+					self.name = vim
+						.iter(mode:gmatch("."))
+						:enumerate()
+						:map(function(i)
+							return mode:sub(1, -i)
+						end)
+						:map(function(s)
+							return self.names[s]
+						end)
+						:next() or mode
+				end,
 				{
 					{
 						provider = "",

@@ -10,13 +10,13 @@
 vim.g.tsknvim_in_focus = true
 if not vim.g.tsknvim_performance then
 	vim.api.nvim_create_autocmd("FocusGained", {
-		group = vim.api.nvim_create_augroup("set_in_focus_on_focus_gained", { clear = true }),
+		group = vim.api.nvim_create_augroup("tsknvim_set_in_focus_on_focus_gained", { clear = true }),
 		callback = function()
 			vim.g.tsknvim_in_focus = true
 		end,
 	})
 	vim.api.nvim_create_autocmd("FocusLost", {
-		group = vim.api.nvim_create_augroup("unset_in_focus_on_focus_lost", { clear = true }),
+		group = vim.api.nvim_create_augroup("tsknvim_unset_in_focus_on_focus_lost", { clear = true }),
 		callback = function()
 			vim.g.tsknvim_in_focus = false
 		end,

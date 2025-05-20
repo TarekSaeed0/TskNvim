@@ -114,4 +114,16 @@ return {
 			},
 		},
 	},
+	{
+		"MagicDuck/grug-far.nvim",
+		optional = true,
+		init = function()
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = { "grug-far" },
+				callback = function()
+					vim.opt_local.signcolumn = "no"
+				end,
+			})
+		end,
+	},
 }

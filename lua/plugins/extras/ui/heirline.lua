@@ -231,12 +231,6 @@ return {
 					},
 				},
 				{
-					init = function(self)
-						local success, search = pcall(vim.fn.searchcount)
-						if success and search.total then
-							self.search = search
-						end
-					end,
 					provider = function(self)
 						return "  "
 							.. string.format(
@@ -245,8 +239,18 @@ return {
 								math.min(self.search.total, self.search.maxcount)
 							)
 					end,
-					condition = function()
-						return vim.v.hlsearch ~= 0
+					condition = function(self)
+						if vim.v.hlsearch == 0 then
+							return false
+						end
+
+						local success, search = pcall(vim.fn.searchcount)
+						if success and search.total then
+							self.search = search
+							return true
+						else
+							return false
+						end
 					end,
 				},
 				{
@@ -274,12 +278,12 @@ return {
 					end,
 					provider = function(self)
 						if self.status.state == "completions" then
-							return ("󰘦 %" .. tostring(self.status.total):len() .. "d/%d:%"):format(
+							return (" 󰘦 %" .. tostring(self.status.total):len() .. "d/%d:%"):format(
 								self.status.current,
 								self.status.total
 							)
 						else
-							return "󰘦 "
+							return " 󰘦 "
 						end
 					end,
 					hl = function(self)

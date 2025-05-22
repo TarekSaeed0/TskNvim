@@ -18,6 +18,9 @@ return {
 			signature = { window = { border = "rounded" } },
 			cmdline = {
 				enabled = true,
+				keymap = {
+					preset = "super-tab",
+				},
 				completion = { menu = { auto_show = true } },
 				---@diagnostic disable-next-line: assign-type-mismatch
 				sources = function()
@@ -32,6 +35,10 @@ return {
 					end
 					return {}
 				end,
+			},
+			keymap = {
+				preset = "super-tab",
+				["<CR>"] = { "accept", "fallback" },
 			},
 		},
 	},

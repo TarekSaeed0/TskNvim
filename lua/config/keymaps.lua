@@ -2,6 +2,4 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
-vim.keymap.set("n", "<C-a>", "gg<S-v>G", { silent = true, desc = "Select all" })
-
 vim.keymap.set("n", "M", "<cmd>Man<cr>", { desc = "Man" })

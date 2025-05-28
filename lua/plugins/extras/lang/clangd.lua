@@ -73,6 +73,10 @@ return {
 			vim.keymap.set("n", "<localleader>cD", function()
 				require("cmake-tools").debug_current_file({})
 			end, { desc = "Debug current file target" })
+
+			vim.keymap.set("n", "<localleader>ct", function()
+				require("cmake-tools").run_test({})
+			end, { desc = "Run test" })
 		end,
 	},
 }

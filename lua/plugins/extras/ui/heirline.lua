@@ -271,33 +271,6 @@ return {
 
 			table.insert(statusline, { provider = "%=" })
 
-			if LazyVim.has("codeium.nvim") then
-				local codeium = {
-					init = function(self)
-						self.status = require("codeium.virtual_text").status()
-					end,
-					provider = function(self)
-						if self.status.state == "completions" then
-							return (" 󰘦 %" .. tostring(self.status.total):len() .. "d/%d:%"):format(
-								self.status.current,
-								self.status.total
-							)
-						else
-							return " 󰘦 "
-						end
-					end,
-					hl = function(self)
-						if self.status == "waiting" then
-							return "DiagnosticWarn"
-						end
-					end,
-					condition = function()
-						return LazyVim.is_loaded("blink.cmp")
-					end,
-				}
-				table.insert(statusline, codeium)
-			end
-
 			if LazyVim.has("flutter-tools.nvim") then
 				local flutter = {
 					{
@@ -471,6 +444,9 @@ return {
 									:map(function(client)
 										return client.name
 									end)
+									:filter(function(name)
+										return name ~= "copilot"
+									end)
 									:join(" ")
 						end,
 						on_click = {
@@ -488,6 +464,112 @@ return {
 				},
 			}
 			table.insert(statusline, lsp)
+
+			if LazyVim.has("codeium.nvim") then
+				local codeium = {
+					init = function(self)
+						self.status = require("codeium.virtual_text").status()
+					end,
+					provider = function(self)
+						if self.status.state == "completions" then
+							return (" 󰘦 %" .. tostring(self.status.total):len() .. "d/%d:%"):format(
+								self.status.current,
+								self.status.total
+							)
+						else
+							return " 󰘦 "
+						end
+					end,
+					hl = function(self)
+						if self.status == "waiting" then
+							return "DiagnosticWarn"
+						end
+					end,
+					condition = function()
+						return LazyVim.is_loaded("blink.cmp")
+					end,
+				}
+				table.insert(statusline, codeium)
+			end
+
+			if LazyVim.has("copilot.lua") then
+				local copilot = {
+					init = function(self)
+						local client = require("copilot.client")
+						local status = require("copilot.status").data.status
+						if client.is_disabled() then
+							self.status = "disabled"
+						elseif status == "InProgress" then
+							self.status = "loading"
+						elseif status == "Warning" then
+							self.status = "error"
+						elseif
+							vim.b.copilot_suggestion_auto_trigger and require("copilot.config").suggestion.auto_trigger
+							or vim.b.copilot_suggestion_auto_trigger
+						then
+							self.status = "sleep"
+						else
+							self.status = "enabled"
+						end
+
+						if self.status == "loading" then
+							if self.loading_frame == nil then
+								self.loading_frame = 1
+								self.loading_frame_start = os.clock()
+							else
+								if os.clock() - self.loading_frame_start > 0.25 / #self.icons.loading then
+									if self.loading_frame < #self.icons.loading then
+										self.loading_frame = self.loading_frame + 1
+									else
+										self.loading_frame = 1
+									end
+									self.loading_frame_start = os.clock()
+								end
+							end
+						else
+							self.loading_frame = nil
+						end
+					end,
+					static = {
+						icons = {
+							enabled = " ",
+							loading = { "◜", "◠", "◝", "◞", "◡", "◟" },
+							error = " ",
+							sleep = " ",
+							disabled = " ",
+						},
+						hl = {
+							enabled = { fg = "green" },
+							loading = { fg = "yellow" },
+							error = { fg = "red" },
+							sleep = {},
+							disabled = {},
+						},
+					},
+					provider = function(self)
+						if self.status == "loading" then
+							return " " .. self.icons.loading[self.loading_frame]
+						end
+						return " " .. self.icons[self.status]
+					end,
+					hl = function(self)
+						return self.hl[self.status]
+					end,
+					on_click = {
+						callback = function()
+							if LazyVim.has("CopilotChat.nvim") then
+								require("CopilotChat").toggle()
+							end
+						end,
+						name = "heirline_copilot_callback",
+					},
+					condition = function()
+						return LazyVim.is_loaded("copilot.lua")
+							and require("copilot.client").buf_is_attached(vim.api.nvim_get_current_buf())
+					end,
+				}
+				table.insert(statusline, copilot)
+			end
 
 			local cursor = {
 				init = function(self)
@@ -1204,6 +1286,7 @@ return {
 						or heirline_utils.get_highlight("String").fg
 						or "NONE",
 					yellow = heirline_utils.get_highlight("DiagnosticWarn").fg or "NONE",
+					red = heirline_utils.get_highlight("DiagnosticError").fg or "NONE",
 				}
 
 				if vim.g.colors_name:match("catppuccin") then

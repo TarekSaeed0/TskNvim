@@ -456,7 +456,12 @@ return {
 							name = "heirline_lsp_callback",
 						},
 						condition = function()
-							return #vim.lsp.get_clients({ bufnr = 0 }) ~= 0
+							return #vim
+								.iter(vim.lsp.get_clients({ bufnr = 0 }))
+								:filter(function(name)
+									return name ~= "copilot"
+								end)
+								:totable() ~= 0
 						end,
 						update = { "LspAttach", "LspDetach", "BufEnter" },
 					},

@@ -1,6 +1,6 @@
 return {
 	{
-		import = "lazyvim.plugins.extras.lang.cmake",
+		import = "plugins.extras.lang.cmake",
 		enabled = function()
 			return vim.fn.executable("cmake") == 1
 		end,

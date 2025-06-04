@@ -193,6 +193,23 @@ local function remove_directory(directory)
 	return true
 end
 
+---@param directory string
+---@return boolean
+local function remove_file(file)
+	local success, error_message = vim.uv.fs_unlink(file)
+	if not success then
+		vim.notify(("Failed to remove file: %s"):format(error_message), vim.log.levels.ERROR, { title = "create_project" })
+		return false
+	end
+
+	return true
+end
+
+local template_init_utilites = {
+	remove_file = remove_file,
+	remove_directory = remove_directory,
+}
+
 ---@param path string
 ---@return boolean
 local function is_text_file(path)
@@ -372,13 +389,25 @@ vim.api.nvim_create_user_command("CreateProject", function(opts)
 		vim.uv.chdir(project_path)
 		local template_init_path = ".template.lua"
 		if vim.uv.fs_stat(template_init_path) then
-			if not dofile(template_init_path) then
+			local template_init_environment =
+				setmetatable(vim.tbl_extend("force", expression_utilities, template_init_utilites, arguments), { __index = _G })
+			local template_init = loadfile(template_init_path, nil, template_init_environment)
+			if not template_init then
 				vim.notify("Failed to create project", vim.log.levels.ERROR, { title = opts.name })
 				vim.uv.chdir("..")
 				remove_directory(arguments.path)
 				return
 			end
 
+			local success, result = pcall(template_init)
+			if not success or not result then
+				vim.notify("Failed to create project", vim.log.levels.ERROR, { title = opts.name })
+				vim.uv.chdir("..")
+				remove_directory(arguments.path)
+				return
+			end
+
+			---@diagnostic disable-next-line: redefined-local
 			local success, error_message = vim.uv.fs_unlink(template_init_path)
 			if not success then
 				vim.notify(

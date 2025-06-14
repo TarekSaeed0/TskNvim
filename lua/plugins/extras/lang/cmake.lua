@@ -42,7 +42,10 @@ return {
 			cmake_build_directory = "build",
 			cmake_virtual_text_support = false,
 			cmake_runner = {
-				opts = { start_insert = true, focus = true },
+				opts = {
+					start_insert = true,
+					focus = true,
+				},
 			},
 		},
 		config = function(_, opts)

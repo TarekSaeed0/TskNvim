@@ -15,7 +15,7 @@ enum {
 	APPLICATION_DEFAULT_WINDOW_HEIGHT = 512,
 };
 
-struct application {
+typedef struct Application {
 	SDL_Renderer *renderer;
 	SDL_Window *window;
 	SDL_Texture *background_texture;
@@ -24,8 +24,8 @@ struct application {
 		int width;
 		int height;
 	} text;
-};
-int application_create(struct application *application) {
+} Application;
+int application_create(Application *application) {
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER)) {
 		SDL_LogError(
 			SDL_LOG_CATEGORY_VIDEO,
@@ -148,7 +148,7 @@ sdl_cleanup:
 no_cleanup:
 	return EXIT_FAILURE;
 }
-void application_destroy(struct application *application) {
+void application_destroy(Application *application) {
 	SDL_DestroyTexture(application->text.texture);
 	SDL_DestroyTexture(application->background_texture);
 	SDL_DestroyRenderer(application->renderer);
@@ -157,7 +157,7 @@ void application_destroy(struct application *application) {
 	IMG_Quit();
 	SDL_Quit();
 }
-void application_run(struct application *application) {
+void application_run(Application *application) {
 	while (true) {
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
@@ -213,7 +213,7 @@ void application_run(struct application *application) {
 int main(int argc, char *argv[]) {
 	(void)argc, (void)argv;
 
-	struct application application;
+	Application application;
 	if (application_create(&application) == EXIT_FAILURE) {
 		return EXIT_FAILURE;
 	}

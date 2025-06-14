@@ -1,15 +1,10 @@
-cmake_minimum_required(VERSION #{vim.version.parse(vim.fn.system({ "cmake", "--version" }))}#)
+cmake_minimum_required(VERSION #{vim.version.parse(vim.fn.system({ "cmake", "--version" }):match("[^\n]*"))}#)
 project(
 	#{in_snake_case(name)}#
 	VERSION 1.0
 	LANGUAGES C
 	DESCRIPTION "#{in_pascal_case(name):gsub("(%l)(%u)", "%1 %2")}# SDL Project"
 )
-
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-set(CMAKE_C_STANDARD 99)
-set(CMAKE_C_STANDARD_REQUIRED ON)
 
 add_executable(#{in_snake_case(name)}# src/main.c)
 

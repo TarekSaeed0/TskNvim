@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION #{vim.version.parse(vim.fn.system({ "cmake", "--version" })):match("[^\n]*"))}#)
+cmake_minimum_required(VERSION #{vim.version.parse(vim.fn.system({ "cmake", "--version" }):match("[^\n]*"))}#)
 project(
 	#{in_snake_case(name)}#
 	VERSION 1.0

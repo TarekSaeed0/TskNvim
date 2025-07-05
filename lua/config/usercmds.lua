@@ -252,6 +252,11 @@ local function create_project(project_path, template_path, arguments)
 			if not expression_cache[expression] then
 				expression_cache[expression] = evalute_expression(expression, expression_environment)
 				if not expression_cache[expression] then
+					vim.notify(
+						('Failed to evaluate expression "%s"'):format(expression),
+						vim.log.levels.ERROR,
+						{ title = "create_project" }
+					)
 					return false
 				end
 			end
@@ -284,6 +289,11 @@ local function create_project(project_path, template_path, arguments)
 				if not expression_cache[expression] then
 					expression_cache[expression] = evalute_expression(expression, expression_environment)
 					if not expression_cache[expression] then
+						vim.notify(
+							('Failed to evaluate expression "%s"'):format(expression),
+							vim.log.levels.ERROR,
+							{ title = "create_project" }
+						)
 						return false
 					end
 				end
@@ -393,7 +403,7 @@ vim.api.nvim_create_user_command("CreateProject", function(opts)
 				setmetatable(vim.tbl_extend("force", expression_utilities, template_init_utilites, arguments), { __index = _G })
 			local template_init = loadfile(template_init_path, nil, template_init_environment)
 			if not template_init then
-				vim.notify("Failed to create project", vim.log.levels.ERROR, { title = opts.name })
+				vim.notify("Failed to load .template.lua", vim.log.levels.ERROR, { title = opts.name })
 				vim.uv.chdir("..")
 				remove_directory(arguments.path)
 				return
@@ -401,7 +411,7 @@ vim.api.nvim_create_user_command("CreateProject", function(opts)
 
 			local success, result = pcall(template_init)
 			if not success or not result then
-				vim.notify("Failed to create project", vim.log.levels.ERROR, { title = opts.name })
+				vim.notify("Failed to execute .template.lua", vim.log.levels.ERROR, { title = opts.name })
 				vim.uv.chdir("..")
 				remove_directory(arguments.path)
 				return

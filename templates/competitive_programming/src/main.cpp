@@ -34,7 +34,11 @@ using vpull = vector<pull>;
 #define bset(x, i) ((x) | (1ULL << (i)))
 #define bclr(x, i) ((x) & ~(1ULL << (i)))
 #define bchk(x, i) ((x) & (1ULL << (i)))
+#define bmsk(n) ((1ULL << (n)) - 1ULL)
 #define bcnt(x) (__builtin_popcountll(x))
+#define bmsbi(x) (63ULL - __builtin_clzll(x | 1ULL))
+#define blsbi(x) (__builtin_ctzll(x | 1ULL))
+#define blsb(x) ((x) & -(x))
 
 int main() {
 	fastio;

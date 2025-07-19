@@ -28,7 +28,7 @@ end
 ---@return string
 local function format_problem(task, file_extension)
 	local name = snake_case(task.name):gsub("^(%w)_", function(s)
-		return s:upper()
+		return s:upper() .. "_"
 	end)
 	return string.format("%s.%s", name, file_extension)
 end

@@ -9,11 +9,13 @@ using ld = long double;
 using pll = pair<ll, ll>;
 using pull = pair<ull, ull>;
 
+using vb = vector<bool>;
 using vll = vector<ll>;
 using vull = vector<ull>;
+using vvull = vector<vull>;
 using vld = vector<ld>;
 using vpll = vector<pll>;
-using vpull = vector<pll>;
+using vpull = vector<pull>;
 
 #define fastio                                                                                     \
 	ios_base::sync_with_stdio(false);                                                              \
@@ -23,12 +25,16 @@ using vpull = vector<pll>;
 #define pb push_back
 #define mp make_pair
 #define all(v) (v).begin(), (v).end()
-#define sort(v) sort(all(v))
 #define rep(i, n) for (ull i = 0; i < (n); i++)
 #define tc()                                                                                       \
 	ull t;                                                                                         \
 	cin >> t;                                                                                      \
 	while (t--)
+
+#define bset(x, i) ((x) | (1ULL << (i)))
+#define bclr(x, i) ((x) & ~(1ULL << (i)))
+#define bchk(x, i) ((x) & (1ULL << (i)))
+#define bcnt(x) (__builtin_popcountll(x))
 
 int main() {
 	fastio;

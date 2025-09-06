@@ -40,9 +40,6 @@ return {
 				preset = "super-tab",
 				["<CR>"] = { "accept", "fallback" },
 			},
-			-- HACK: until blink.cmp fixes crash on copilot suggestion completion
-			-- see https://github.com/Saghen/blink.cmp/issues/1727
-			fuzzy = { implementation = "lua" },
 		},
 	},
 }

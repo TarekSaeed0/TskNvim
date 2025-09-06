@@ -458,8 +458,8 @@ return {
 						condition = function()
 							return #vim
 								.iter(vim.lsp.get_clients({ bufnr = 0 }))
-								:filter(function(name)
-									return name ~= "copilot"
+								:filter(function(client)
+									return client.name ~= "copilot"
 								end)
 								:totable() ~= 0
 						end,
@@ -1073,7 +1073,7 @@ return {
 					elseif vim.opt.signcolumn:get():match("no") then
 						self.signcolumn = false
 					else
-						local signs = vim.fn.sign_getplaced(0, { group = "*" })
+						local signs = vim.fn.sign_getplaced(vim.fn.bufname(), { group = "*" })
 						for _, sign in ipairs(signs) do
 							self.signcolumn = false
 							if #sign.signs > 0 then

@@ -436,7 +436,7 @@ return {
 		},
 	},
 	{
-		"echasnovski/mini.icons",
+		"nvim-mini/mini.icons",
 		opts = {
 			default = {
 				directory = { glyph = "", hl = "MiniIconsCyan" },

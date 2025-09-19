@@ -17,6 +17,8 @@ using vpll = vector<pll>;
 using vpull = vector<pull>;
 using vvll = vector<vll>;
 using vvull = vector<vull>;
+using vvpll = vector<vpll>;
+using vvpull = vector<vpull>;
 
 using sll = set<ll>;
 using sull = set<ull>;

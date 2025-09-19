@@ -17,7 +17,6 @@ return {
 			},
 			signature = { window = { border = "rounded" } },
 			cmdline = {
-				enabled = true,
 				keymap = {
 					preset = "super-tab",
 				},

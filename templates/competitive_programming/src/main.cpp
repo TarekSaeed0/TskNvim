@@ -139,6 +139,144 @@ ull modstr(const string &s, ull m) {
 	return r;
 }
 
+vull p;
+vull sz;
+
+void dsu(ull n) {
+	p.resize(n);
+	sz.resize(n, 1);
+	rep(i, n) {
+		p[i] = i;
+		sz[i] = 1;
+	}
+}
+ull dsu_leader(ull u) {
+	if (p[u] == u) {
+		return u;
+	}
+
+	return p[u] = dsu_leader(p[u]);
+}
+void dsu_union(ull u, ull v) {
+	u = dsu_leader(u);
+	v = dsu_leader(v);
+
+	if (u == v) {
+		return;
+	}
+
+	if (sz[u] < sz[v]) {
+		swap(u, v);
+	}
+
+	p[v] = u;
+	sz[u] += sz[v];
+}
+
+template <typename T, typename F> vector<vector<T>> st_build(vector<T> &a, F f) {
+	ull n = a.size();
+	ull k = 64 - __builtin_clzll(n);
+	vector<vector<T>> st(n, vector<T>(k + 1));
+	for (ull i = 0; i < n; i++) {
+		st[i][0] = a[i];
+	}
+	for (ull j = 1; j <= k; j++) {
+		for (ull i = 0; i + (1ULL << j) <= n; i++) {
+			st[i][j] = f(st[i][j - 1], st[i + (1ULL << (j - 1))][j - 1]);
+		}
+	}
+	return st;
+}
+
+template <typename T, typename F> T st_query(vector<vector<T>> &st, F f, ull l, ull r) {
+	ull k = 64 - __builtin_clzll(r - l + 1) - 1;
+	return f(st[l][k], st[r - (1ULL << k) + 1][k]);
+}
+
+/*
+
+ull n, m;
+cin >> n >> m;
+
+vvpull g(n + 1);
+rep(i, m) {
+	ull a, b, c;
+	cin >> a >> b >> c;
+	g[a].pb({b, c});
+}
+
+vull ds(n + 1, ULLONG_MAX);
+priority_queue<pull, vpull, greater<>> pq;
+ds[1] = 0;
+pq.push({0, 1});
+while (!pq.empty()) {
+	auto [d, u] = pq.top();
+	pq.pop();
+
+	if (ds[u] < d) {
+		continue;
+	}
+
+	for (auto [v, w] : g[u]) {
+		if (ds[v] <= d + w) {
+			continue;
+		}
+
+		ds[v] = d + w;
+		pq.push({d + w, v});
+	}
+}
+
+*/
+
+/*
+
+ull n, m;
+cin >> n >> m;
+
+vector<array<ll, 3>> e(m);
+vvull g(n + 1);
+rep(i, m) {
+	ll a, b, x;
+	cin >> a >> b >> x;
+	e[i] = {a, b, x};
+	g[a].pb(b);
+}
+
+vll ds(n + 1, LLONG_MIN);
+ds[1] = 0;
+
+rep(i, n - 1) {
+	for (auto [a, b, x] : e) {
+		if (ds[a] != LLONG_MIN && ds[a] + x > ds[b]) {
+			ds[b] = ds[a] + x;
+		}
+	}
+}
+
+queue<ull> q;
+vb vis(n + 1, false);
+for (auto [a, b, x] : e) {
+	if (ds[a] != LLONG_MIN && ds[a] + x > ds[b]) {
+		vis[b] = true;
+		q.push(b);
+	}
+}
+
+while (!q.empty()) {
+	ull u = q.front();
+	q.pop();
+
+	for (auto v : g[u]) {
+		if (!vis[v]) {
+			vis[v] = true;
+			q.push(v);
+		}
+	}
+}
+
+*/
+
 int main() {
 	fastio;
 }

@@ -1219,9 +1219,10 @@ return {
 		  ]])
 
 			local function is_fold_start(handle, line)
-				local window = ffi.C.find_window_by_handle(handle, ffi.new("Error"))
+				--[[ local window = ffi.C.find_window_by_handle(handle, ffi.new("Error"))
 				local fold_info = ffi.C.fold_info(window, line)
-				return line == fold_info.fi_lnum
+				return line == fold_info.fi_lnum ]]
+				return false
 			end
 
 			local foldcolumn = {

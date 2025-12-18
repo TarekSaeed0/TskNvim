@@ -3,11 +3,25 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		opts = {
-			capabilities = {
-				textDocument = {
-					foldingRange = {
-						dynamicRegistration = false,
-						lineFoldingOnly = true,
+			servers = {
+				["*"] = {
+					capabilities = {
+						textDocument = {
+							foldingRange = {
+								dynamicRegistration = false,
+								lineFoldingOnly = true,
+							},
+						},
+					},
+					keys = {
+						{
+							"K",
+							function()
+								if not LazyVim.is_loaded("nvim-ufo") or not require("ufo").peekFoldedLinesUnderCursor(false, false) then
+									vim.lsp.buf.hover()
+								end
+							end,
+						},
 					},
 				},
 			},
@@ -61,22 +75,6 @@ return {
 
 			vim.opt.foldlevel = 99
 			vim.opt.foldlevelstart = 99
-
-			local function peek_fold_or_hover()
-				if not require("ufo").peekFoldedLinesUnderCursor(false, false) then
-					vim.lsp.buf.hover()
-				end
-			end
-
-			vim.keymap.set("n", "K", peek_fold_or_hover, { desc = "Hover" })
-
-			local keys = require("lazyvim.plugins.lsp.keymaps").get()
-			for _, key in ipairs(keys) do
-				if key[1] == "K" then
-					key[2] = peek_fold_or_hover
-					break
-				end
-			end
 		end,
 		keys = {
 			{

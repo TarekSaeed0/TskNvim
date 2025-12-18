@@ -265,5 +265,6 @@ return {
 				)
 			end,
 		},
+		ft = "dart",
 	},
 }

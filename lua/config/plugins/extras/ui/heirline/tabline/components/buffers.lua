@@ -27,12 +27,10 @@ local icon = {
 
 local path = {
 	init = function(self)
-		local path = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(self.buffer), ":~:."):gsub("%%", "%%%%")
-
 		local separator = package.config:sub(1, 1)
 		local ellipsis = "…"
 
-		local components = vim.split(path, separator)
+		local components = self.path_suffix
 
 		local child = { flexible = 50 }
 
@@ -326,6 +324,45 @@ local previous_page_button = {
 	end,
 }
 
+---given a list of paths, return a list of the shortest suffix pathes, such that there is no ambiguity
+---@param paths string[][]
+---@return string[][]
+local function unique_path_suffixes(paths)
+	local root = {}
+
+	for _, path in ipairs(paths) do
+		local node = root
+		for i = #path, 1, -1 do
+			local component = path[i]
+			node.children = node.children or {}
+			node.children[component] = node.children[component] or { children_count = 0 }
+			node = node.children[component]
+			node.children_count = node.children_count + 1
+		end
+	end
+
+	local suffixes = {}
+	for i, path in ipairs(paths) do
+		local node = root
+		local suffix = {}
+		for j = #path, 1, -1 do
+			local component = path[j]
+			node = node.children[component]
+			table.insert(suffix, 1, component)
+			if node.children_count == 1 then
+				break
+			end
+		end
+
+		suffixes[i] = suffix
+	end
+
+	return suffixes
+end
+
+---given a component, return its minimum width, after contracting all flexible sub-components
+---@param component StatusLine
+---@return integer
 local function minimum_component_width(component)
 	if component.condition and not component:condition() then
 		return 0
@@ -370,12 +407,16 @@ local buffers = {
 				return vim.api.nvim_buf_is_valid(buffer) and vim.api.nvim_get_option_value("buflisted", { buf = buffer })
 			end, vim.api.nvim_list_bufs())
 
+			local separator = package.config:sub(1, 1)
+
 			local children = {}
 			for index, buffer in ipairs(self.buffers) do
 				local child = self.shared.children[index]
 				if not (child and child.buffer == buffer) then
 					child = self:new(buffer_template, index)
 					child.buffer = buffer
+					child.path =
+						vim.split(vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buffer), ":~"):gsub("%%", "%%%%"), separator)
 				end
 
 				children[index] = child
@@ -388,6 +429,16 @@ local buffers = {
 				else
 					child.is_active = false
 				end
+			end
+
+			local paths = {}
+			for i, child in ipairs(children) do
+				paths[i] = child.path
+			end
+
+			local path_suffixes = unique_path_suffixes(paths)
+			for i, child in ipairs(children) do
+				child.path_suffix = path_suffixes[i]
 			end
 
 			self.shared.children = children

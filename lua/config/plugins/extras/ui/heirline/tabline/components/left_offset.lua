@@ -18,6 +18,7 @@ local offset = {
 					hl = {
 						fg = "background",
 						bg = "accent",
+						bold = true,
 					},
 				},
 				{
@@ -44,12 +45,15 @@ local offset = {
 			hl = "WinSeparator",
 		},
 		condition = function(self)
-			self.window = vim.api.nvim_tabpage_list_wins(0)[1]
-			local buffer = vim.api.nvim_win_get_buf(self.window)
+			for _, window in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+				local buffer = vim.api.nvim_win_get_buf(window)
+				local filetype = vim.api.nvim_get_option_value("filetype", { buf = buffer })
 
-			if vim.api.nvim_get_option_value("filetype", { buf = buffer }) == "neo-tree" then
-				self.title = "Explorer"
-				return true
+				if filetype == "neo-tree" then
+					self.window = window
+					self.title = "Explorer"
+					return true
+				end
 			end
 		end,
 	},

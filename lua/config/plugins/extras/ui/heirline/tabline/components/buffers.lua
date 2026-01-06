@@ -45,14 +45,20 @@ local path = {
 			},
 			{ provider = " " },
 		}
-		for i = 2, #components do
+		for i = 2, #components - 1 do
 			child[i] = {
 				{ provider = " " },
 				{
-					provider = ellipsis
-						.. separator
-						.. table.concat(components, separator, i, #components - 1)
-						.. (#components > i and separator or ""),
+					{
+						provider = components[1],
+					},
+					{
+						provider = separator
+							.. ellipsis
+							.. separator
+							.. table.concat(components, separator, i + 1, #components - 1)
+							.. (#components > i + 1 and separator or ""),
+					},
 					hl = { fg = heirline_utils.get_highlight("TabLine").fg, bold = false },
 				},
 				{
@@ -274,8 +280,8 @@ local next_page_button = {
 				self.shared.page = math.min(self.shared.page_count, self.shared.page + 1)
 				self.shared.page_forced = true
 
-				self.shared.parent:broadcast(function(self)
-					self._win_cache = nil
+				self.shared.parent:broadcast(function(child)
+					child._win_cache = nil
 				end)
 				vim.cmd.redrawtabline()
 			end,
@@ -310,8 +316,8 @@ local previous_page_button = {
 				self.shared.page = math.max(1, self.shared.page - 1)
 				self.shared.page_forced = true
 
-				self.shared.parent:broadcast(function(self)
-					self._win_cache = nil
+				self.shared.parent:broadcast(function(child)
+					child._win_cache = nil
 				end)
 				vim.cmd.redrawtabline()
 			end,

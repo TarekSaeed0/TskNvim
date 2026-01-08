@@ -32,9 +32,9 @@ ffi.cdef([[
 
 	// https://github.com/neovim/neovim/blob/b8135a76b71f1af0d708e3dc58ccb58abad59f7c/src/nvim/fold_defs.h#L7
 	typedef struct {
-		linenr_T fi_lnum; 	///< line number where fold starts
-		int fi_level;		///< level of the fold; when this is zero the
-							///< other fields are invalid
+		linenr_T fi_lnum;	///< line number where fold starts
+		int fi_level;			///< level of the fold; when this is zero the
+											///< other fields are invalid
 		int fi_low_level;	///< lowest fold level that starts in the same line
 		linenr_T fi_lines;
 	} foldinfo_T;
@@ -44,10 +44,13 @@ ffi.cdef([[
 ]])
 
 local function is_fold_start(handle, line)
-	--[[ local window = ffi.C.find_window_by_handle(handle, ffi.new("Error"))
-				local fold_info = ffi.C.fold_info(window, line)
-				return line == fold_info.fi_lnum ]]
-	return false
+	local window = ffi.C.find_window_by_handle(handle, ffi.new("Error"))
+	local fold_info = ffi.C.fold_info(window, line)
+	return line == fold_info.start
+
+	-- use this if the above ever breaks
+	--[[ return vim.fn.foldclosed(line) == line
+		or (vim.fn.foldlevel(line) > 0 and vim.fn.foldlevel(line - 1) < vim.fn.foldlevel(line)) ]]
 end
 
 local foldcolumn = {

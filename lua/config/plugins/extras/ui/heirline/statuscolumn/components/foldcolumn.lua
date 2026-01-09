@@ -43,14 +43,18 @@ ffi.cdef([[
 	foldinfo_T fold_info(win_T *win, linenr_T lnum);
 ]])
 
-local function is_fold_start(handle, line)
-	local window = ffi.C.find_window_by_handle(handle, ffi.new("Error"))
-	local fold_info = ffi.C.fold_info(window, line)
-	return line == fold_info.start
+---@class FoldInfo
+---@field start number
+---@field level number
+---@field llevel number
+---@field lines number
 
-	-- use this if the above ever breaks
-	--[[ return vim.fn.foldclosed(line) == line
-		or (vim.fn.foldlevel(line) > 0 and vim.fn.foldlevel(line - 1) < vim.fn.foldlevel(line)) ]]
+---@param winid integer
+---@param line integer
+---@return FoldInfo
+local function fold_info(winid, line)
+	local window = ffi.C.find_window_by_handle(winid, ffi.new("Error"))
+	return ffi.C.fold_info(window, line)
 end
 
 local foldcolumn = {
@@ -59,9 +63,11 @@ local foldcolumn = {
 		fold_closed_icon = vim.opt.fillchars:get().foldclose,
 	},
 	provider = function(self)
-		---@diagnostic disable-next-line: undefined-field
-		if is_fold_start(0, vim.v.lnum) then
-			if vim.fn.foldclosed(vim.v.lnum) == -1 then
+		local line = vim.v.lnum
+		local info = fold_info(0, line)
+
+		if info.start == line then
+			if info.lines == 0 then
 				return self.fold_open_icon .. " "
 			else
 				return self.fold_closed_icon .. " "
@@ -73,13 +79,13 @@ local foldcolumn = {
 	on_click = {
 		callback = function(_, minwid)
 			local line = vim.fn.getmousepos().line
+			local info = fold_info(minwid, line)
 
-			---@diagnostic disable-next-line: undefined-field
-			if not is_fold_start(minwid, line) then
+			if info.start ~= line then
 				return
 			end
 
-			if tonumber(vim.fn.win_execute(minwid, ("noautocmd echo foldclosed(%d)"):format(line))) == -1 then
+			if info.lines == 0 then
 				vim.fn.win_execute(minwid, ("noautocmd %dfoldclose"):format(line))
 			else
 				vim.fn.win_execute(minwid, ("noautocmd %dfoldopen"):format(line))

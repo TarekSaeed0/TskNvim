@@ -185,6 +185,7 @@ else
 end
 
 vim.api.nvim_create_autocmd({ "VimEnter", "UIEnter", "BufAdd", "BufDelete" }, {
+	group = vim.api.nvim_create_augroup("tsknvim_hide_tabline_for_empty_buffer_list", { clear = true }),
 	callback = function()
 		vim.schedule(function()
 			local buffers = vim.tbl_filter(function(buffer)

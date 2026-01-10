@@ -1,6 +1,12 @@
 local offset = {
 	flexible = 70,
 	{
+		static = {
+			titles = {
+				["trouble"] = "Symbols",
+				["grug-far"] = "Search/Replace",
+			},
+		},
 		{
 			provider = "│",
 			hl = "WinSeparator",
@@ -49,10 +55,14 @@ local offset = {
 				local buffer = vim.api.nvim_win_get_buf(window)
 				local filetype = vim.api.nvim_get_option_value("filetype", { buf = buffer })
 
-				if filetype == "trouble" then
-					self.window = window
-					self.title = "Symbols"
-					return true
+				local title = self.titles[filetype]
+				if title then
+					local position = vim.api.nvim_win_get_position(window)
+					if position[1] == 1 then
+						self.window = window
+						self.title = title
+						return true
+					end
 				end
 			end
 		end,

@@ -168,6 +168,7 @@ return {
 
 					TroubleNormal = { link = "NormalC" },
 					TroubleNormalNC = { link = "NormalNC" },
+					TroubleIndent = { link = "NONE" },
 
 					TelescopeNormal = { fg = colors.text, bg = colors.base },
 					TelescopeTitle = { link = "FloatTitle" },

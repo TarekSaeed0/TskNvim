@@ -44,17 +44,33 @@ ffi.cdef([[
 ]])
 
 ---@class FoldInfo
----@field start number
----@field level number
----@field llevel number
----@field lines number
+---@field fi_lnum number
+---@field fi_level number
+---@field li_low_level number
+---@field fi_lines number
 
 ---@param winid integer
 ---@param line integer
 ---@return FoldInfo
 local function fold_info(winid, line)
 	local window = ffi.C.find_window_by_handle(winid, ffi.new("Error"))
-	return ffi.C.fold_info(window, line)
+	local info = ffi.C.fold_info(window, line)
+
+	local offsets = {
+		fi_lnum = 0,
+		fi_level = 4,
+		fi_low_level = 8,
+		fi_lines = 12,
+	}
+
+	local bytes = ffi.cast("const uint8_t *", ffi.new("foldinfo_T[1]", info))
+
+	return {
+		fi_lnum = ffi.cast("const linenr_T *", bytes + offsets.fi_lnum)[0],
+		fi_level = ffi.cast("const int *", bytes + offsets.fi_level)[0],
+		fi_low_level = ffi.cast("const int *", bytes + offsets.fi_low_level)[0],
+		fi_lines = ffi.cast("const linenr_T *", bytes + offsets.fi_lines)[0],
+	}
 end
 
 local foldcolumn = {
@@ -66,8 +82,8 @@ local foldcolumn = {
 		local line = vim.v.lnum
 		local info = fold_info(0, line)
 
-		if info.start == line then
-			if info.lines == 0 then
+		if info.fi_lnum == line then
+			if info.fi_lines == 0 then
 				return self.fold_open_icon .. " "
 			else
 				return self.fold_closed_icon .. " "
@@ -81,11 +97,11 @@ local foldcolumn = {
 			local line = vim.fn.getmousepos().line
 			local info = fold_info(minwid, line)
 
-			if info.start ~= line then
+			if info.fi_lnum ~= line then
 				return
 			end
 
-			if info.lines == 0 then
+			if info.fi_lines == 0 then
 				vim.fn.win_execute(minwid, ("noautocmd %dfoldclose"):format(line))
 			else
 				vim.fn.win_execute(minwid, ("noautocmd %dfoldopen"):format(line))

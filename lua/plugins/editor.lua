@@ -126,4 +126,11 @@ return {
 			})
 		end,
 	},
+	{
+		"ThePrimeagen/refactoring.nvim",
+		optional = true,
+		event = function()
+			return {}
+		end,
+	},
 }

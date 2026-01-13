@@ -1,3 +1,7 @@
+local signcolumn = require("config.plugins.extras.ui.heirline.statuscolumn.components.signcolumn")
+local numbercolumn = require("config.plugins.extras.ui.heirline.statuscolumn.components.numbercolumn")
+local foldcolumn = require("config.plugins.extras.ui.heirline.statuscolumn.components.foldcolumn")
+
 local statuscolumn = {
 	init = function(self)
 		self.cursor_line = vim.api.nvim_win_get_cursor(0)[1]
@@ -18,6 +22,9 @@ local statuscolumn = {
 		end
 	end,
 	{
+		signcolumn,
+		numbercolumn,
+		foldcolumn,
 		condition = function()
 			return vim.v.virtnum == 0
 		end,
@@ -84,14 +91,5 @@ local statuscolumn = {
 		return vim.opt.number:get() or self.signcolumn
 	end,
 }
-
-local signcolumn = require("config.plugins.extras.ui.heirline.statuscolumn.components.signcolumn")
-table.insert(statuscolumn[1], signcolumn)
-
-local numbercolumn = require("config.plugins.extras.ui.heirline.statuscolumn.components.numbercolumn")
-table.insert(statuscolumn[1], numbercolumn)
-
-local foldcolumn = require("config.plugins.extras.ui.heirline.statuscolumn.components.foldcolumn")
-table.insert(statuscolumn[1], foldcolumn)
 
 return statuscolumn

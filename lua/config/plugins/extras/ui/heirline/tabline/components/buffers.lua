@@ -449,7 +449,7 @@ local buffers = {
 
 			self.shared.children = children
 
-			local maximum_page_width = self.maximum_buffers_width - 4 - 4 - 3
+			local maximum_page_width = vim.opt.columns:get() - 4 - 4 - 3
 			local page_count = 1
 			local page_width = 0
 			local page_starts = { 1 }

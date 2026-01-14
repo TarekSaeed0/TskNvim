@@ -15,9 +15,13 @@ return {
 				},
 			},
 		},
+		---@module "copilot.config"
+		---@type CopilotConfig
+		---@diagnostic disable-next-line: missing-fields
 		opts = {
 			nes = {
 				enabled = true,
+				auto_trigger = true,
 				keymap = {
 					accept_and_goto = "<Tab>",
 					accept = false,
@@ -25,5 +29,8 @@ return {
 				},
 			},
 		},
+		event = function()
+			return "InsertEnter"
+		end,
 	},
 }

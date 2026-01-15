@@ -280,7 +280,7 @@ return {
 
 			Snacks.toggle.new({
 				id = "tmuxstatusbar",
-				name = "Enable/Disable Fold Column",
+				name = "Enable/Disable Tmux Status Bar",
 				get = is_tmux_status_bar_shown,
 				set = function(state)
 					if state then

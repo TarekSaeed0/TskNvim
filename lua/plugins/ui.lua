@@ -237,7 +237,7 @@ return {
 
 			Snacks.toggle.new({
 				id = "signcolumn",
-				name = "Enable/Disable Sign Column",
+				name = "Sign Column",
 				get = function()
 					return not vim.opt.signcolumn:get():match("no")
 				end,
@@ -252,7 +252,7 @@ return {
 
 			Snacks.toggle.new({
 				id = "foldcolumn",
-				name = "Enable/Disable Fold Column",
+				name = "Fold Column",
 				get = function()
 					return not vim.opt.foldcolumn:get():match("no")
 				end,
@@ -280,7 +280,7 @@ return {
 
 			Snacks.toggle.new({
 				id = "tmuxstatusbar",
-				name = "Enable/Disable Tmux Status Bar",
+				name = "Tmux Status Bar",
 				get = is_tmux_status_bar_shown,
 				set = function(state)
 					if state then
@@ -304,6 +304,44 @@ return {
 					end
 				end,
 			})
+
+			-- FIX: find a way to get this working
+			local notifications_enabled = true
+			Snacks.toggle
+				.new({
+					id = "notifications",
+					name = "Notifications",
+					get = function()
+						return notifications_enabled
+					end,
+					set = function(state)
+						notifications_enabled = state
+
+						local router = require("noice.message.router")
+
+						local router_disable = {
+							filter = {
+								any = {
+									{
+										event = "msg_show",
+									},
+									{
+										event = "lsp",
+									},
+								},
+							},
+							opts = { skip = true },
+						}
+
+						if state then
+							table.remove(router._routes, 1)
+						else
+							table.insert(router._routes, 1, router_disable)
+							Snacks.notifier.hide()
+						end
+					end,
+				})
+				:map("<leader>uN")
 		end,
 	},
 	{
@@ -418,6 +456,8 @@ return {
 	{
 		"folke/noice.nvim",
 		enabled = not vim.g.tsknvim_performance,
+		---@module "noice"
+		---@type NoiceConfig
 		opts = {
 			presets = {
 				bottom_search = false,

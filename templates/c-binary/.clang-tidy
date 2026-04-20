@@ -1,10 +1,14 @@
 Checks: >
-  *,
-  -altera-*,
-  -llvmlibc-*,
-  -android-*,
-  -readability-function-cognitive-complexity,
+  clang-analyzer-*,
+  bugprone-*,
+  cert-*,
+  portability-*,
+  performance-*,
+  -clang-analyzer-cplusplus*,
+  -bugprone-easily-swappable-parameters,
   -clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,
-  -readability-magic-numbers,
-  -cppcoreguidelines-avoid-magic-numbers,
-  -misc-include-cleaner,
+
+WarningsAsErrors: >
+  clang-analyzer-*,
+  bugprone-*,
+  cert-*

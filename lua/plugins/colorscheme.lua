@@ -201,6 +201,7 @@ return {
 					CompetiTestWrong = { fg = colors.red, bold = true },
 				}
 			end,
+			auto_integrations = true,
 			no_italic = vim.g.tsknvim_on_termux,
 		},
 	},

@@ -30,6 +30,9 @@ require("lazy").setup({
 		version = false, -- always use the latest git commit
 		-- version = "*", -- try installing the latest stable version for plugins that support semver
 	},
+	git = {
+		timeout = 600,
+	},
 	install = { colorscheme = { "catppuccin-nvim" } },
 	ui = {
 		border = "rounded",

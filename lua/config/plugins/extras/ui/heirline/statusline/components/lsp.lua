@@ -70,7 +70,9 @@ local lsp = {
 			end,
 			on_click = {
 				callback = function()
-					vim.schedule(vim.cmd.LspInfo)
+					vim.schedule(function()
+						vim.cmd("checkhealth vim.lsp")
+					end)
 				end,
 				name = "heirline_lsp_callback",
 			},

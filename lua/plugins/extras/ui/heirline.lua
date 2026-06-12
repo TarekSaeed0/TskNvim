@@ -53,7 +53,7 @@ return {
 				return colors
 			end
 
-			heirline.load_colors(setup_colors)
+			heirline.load_colors(setup_colors())
 			vim.api.nvim_create_autocmd("ColorScheme", {
 				callback = function()
 					heirline_utils.on_colorscheme(setup_colors)

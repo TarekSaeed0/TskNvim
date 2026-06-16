@@ -178,6 +178,9 @@ return {
 					MasonHeader = { link = "FloatTitle" },
 					MasonHighlightBlockBold = { bg = colors.sapphire, bold = true },
 
+					CopilotChatHeader = { link = "FloatTitle" },
+					CopilotChatSeparator = { link = "FloatBorder" },
+
 					UfoFoldedEllipsis = { fg = colors.overlay0, bg = "NONE" },
 
 					texOptSep = { link = "Normal" },

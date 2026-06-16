@@ -1,61 +1,69 @@
+local titles = {
+	["neo-tree"] = "Explorer",
+}
+
 local offset = {
-	flexible = 70,
-	{
-		static = {
-			titles = {
-				["neo-tree"] = "Explorer",
-			},
-		},
+	init = function(self)
+		self.windows = {}
+		for _, window in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+			local buffer = vim.api.nvim_win_get_buf(window)
+			local filetype = vim.api.nvim_get_option_value("filetype", { buf = buffer })
+
+			if titles[filetype] then
+				self.windows[filetype] = window
+			end
+		end
+	end,
+}
+
+for filetype, title in pairs(titles) do
+	table.insert(offset, {
+		flexible = 70,
 		{
-			fallthrough = false,
 			{
+				fallthrough = false,
 				{
 					{
-						provider = "",
+						{
+							provider = "",
+							hl = { fg = "accent" },
+						},
+						hl = "Normal",
+					},
+					{
+						provider = " " .. title .. " ",
+						hl = {
+							fg = "background",
+							bg = "accent",
+							bold = true,
+						},
+					},
+					{
+						provider = "╱",
 						hl = { fg = "accent" },
 					},
-					hl = "Normal",
-				},
-				{
-					provider = function(self)
-						return " " .. self.title .. " "
-					end,
-					hl = {
-						fg = "background",
-						bg = "accent",
-						bold = true,
+					{
+						provider = function(self)
+							return string.rep(" ", vim.api.nvim_win_get_width(self.window) - #title - 5)
+						end,
 					},
-				},
-				{
-					provider = "╱",
-					hl = { fg = "accent" },
+					condition = function(self)
+						return vim.api.nvim_win_get_width(self.window) - #title - 5 >= 0
+					end,
 				},
 				{
 					provider = function(self)
-						return string.rep(" ", vim.api.nvim_win_get_width(self.window) - #self.title - 5)
+						return string.rep(" ", vim.api.nvim_win_get_width(self.window))
 					end,
 				},
-				condition = function(self)
-					return vim.api.nvim_win_get_width(self.window) - #self.title - 5 >= 0
-				end,
 			},
 			{
-				provider = function(self)
-					return string.rep(" ", vim.api.nvim_win_get_width(self.window))
-				end,
+				provider = "│",
+				hl = "WinSeparator",
 			},
-		},
-		{
-			provider = "│",
-			hl = "WinSeparator",
-		},
-		condition = function(self)
-			for _, window in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-				local buffer = vim.api.nvim_win_get_buf(window)
-				local filetype = vim.api.nvim_get_option_value("filetype", { buf = buffer })
-
-				local title = self.titles[filetype]
-				if title then
+			condition = function(self)
+				local window = self.windows[filetype]
+				if window then
 					local position = vim.api.nvim_win_get_position(window)
 					if position[1] == 1 then
 						self.window = window
@@ -63,10 +71,10 @@ local offset = {
 						return true
 					end
 				end
-			end
-		end,
-	},
-	{ provider = "" },
-}
+			end,
+		},
+		{ provider = "" },
+	})
+end
 
 return offset

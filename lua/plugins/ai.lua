@@ -1,6 +1,7 @@
 return {
 	{
 		"zbirenbaum/copilot.lua",
+		optional = true,
 		dependencies = {
 			"copilotlsp-nvim/copilot-lsp",
 			init = function()

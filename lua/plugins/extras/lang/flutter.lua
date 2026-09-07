@@ -5,6 +5,17 @@ return {
 			root = { "pubspec.yaml" },
 		})
 	end,
+	{ import = "lazyvim.plugins.extras.lang.json" },
+	{
+		"LazyVim/LazyVim",
+		init = function()
+			vim.filetype.add({
+				extension = {
+					arb = "json",
+				},
+			})
+		end,
+	},
 	{
 		"neovim/nvim-lspconfig",
 		opts = {
@@ -216,6 +227,20 @@ return {
 						},
 					},
 				},
+				jsonls = {
+					settings = {
+						json = {
+							schemas = {
+								{
+									name = "arb.json",
+									description = "Application Resource Bundle",
+									fileMatch = { "*.arb" },
+									url = "https://raw.githubusercontent.com/google/app-resource-bundle/main/schema/arb.json",
+								},
+							},
+						},
+					},
+				},
 			},
 			setup = {
 				dartls = function()
@@ -229,11 +254,22 @@ return {
 		opts = { ensure_installed = { "dart" } },
 	},
 	{
-		"akinsho/flutter-tools.nvim",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"stevearc/dressing.nvim",
+		"stevearc/conform.nvim",
+		opts = {
+			formatters = {
+				prettier = {
+					options = {
+						ext_parsers = {
+							arb = "json",
+						},
+					},
+				},
+			},
 		},
+	},
+	{
+		"akinsho/flutter-tools.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
 		opts = {
 			ui = { border = "rounded" },
 			decorations = {
@@ -242,15 +278,10 @@ return {
 					device = true,
 				},
 			},
+			debugger = { enabled = true },
+			fvm = true,
 			closing_tags = { highlight = "LspInlayHint" },
 			dev_log = { enabled = false },
-			debugger = { enabled = true },
-			lsp = {
-				color = {
-					enabled = true,
-					virtual_text_str = "󱓻",
-				},
-			},
 			on_attach = require("lazyvim.plugins.lsp.keymaps").on_attach,
 			capabilities = function(config)
 				local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")

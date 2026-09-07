@@ -20,6 +20,22 @@ return {
 	},
 	{
 		"lervag/vimtex",
+		init = function()
+			vim.g.vimtex_syntax_conceal_disable = 1
+			vim.g.vimtex_compiler_progname = "nvr"
+			vim.g.vimtex_view_method = "zathura"
+			vim.g.vimtex_format_enabled = 1
+			vim.g.vimtex_quickfix_enabled = 0
+			vim.g.vimtex_compiler_latexmk = {
+				options = {
+					"-verbose",
+					"-file-line-error",
+					"-synctex=1",
+					"-interaction=nonstopmode",
+					"-shell-escape",
+				},
+			}
+		end,
 		keys = {
 			{ "<localleader>lf", "<plug>(vimtex-view)", ft = "tex" },
 		},

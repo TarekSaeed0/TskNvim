@@ -114,6 +114,9 @@ return {
 				doc = {
 					float = false,
 				},
+				convert = {
+					notify = true,
+				},
 				math = {
 					latex = {
 						font_size = "normalsize",
@@ -480,6 +483,38 @@ return {
 		opts = {
 			default = {
 				directory = { glyph = "", hl = "MiniIconsCyan" },
+			},
+		},
+	},
+	{
+		"rcarriga/nvim-dap-ui",
+		---@module "dapui"
+		---@type dapui.Config
+		---@diagnostic disable-next-line: missing-fields
+		opts = {
+			wrap = true,
+			layouts = {
+				{
+					elements = {
+						{
+							id = "scopes",
+							size = 0.25,
+						},
+						{ id = "breakpoints", size = 0.25 },
+						{ id = "stacks", size = 0.25 },
+						{ id = "watches", size = 0.25 },
+					},
+					size = 25,
+					position = "left",
+				},
+				{
+					elements = {
+						"repl",
+						"console",
+					},
+					size = 8,
+					position = "bottom",
+				},
 			},
 		},
 	},

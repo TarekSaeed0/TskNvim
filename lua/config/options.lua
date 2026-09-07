@@ -7,12 +7,6 @@ vim.g.tsknvim_on_termux = vim.fn.executable("termux-setup-storage") == 1
 -- disable some features for performance on termux
 vim.g.tsknvim_performance = false
 
-vim.opt.guifont = "FiraCode Nerd Font:h10"
-
-if vim.g.neovide then
-	vim.g.neovide_floating_corner_radius = 0.75
-end
-
 vim.g.lazyvim_check_order = false
 vim.g.lazyvim_picker = "snacks"
 
@@ -29,25 +23,9 @@ vim.opt.cinoptions:append({ "#1s" })
 
 vim.opt.pumblend = 0
 
--- FIX: disable temporarily until more plugins support it
--- vim.opt.winborder = "rounded"
+vim.opt.winborder = "rounded"
 
 vim.opt.fillchars:append({ foldopen = "", foldclose = "", msgsep = "─" })
 vim.opt.listchars:append({ tab = "   " })
-
-vim.g.vimtex_syntax_conceal_disable = 1
-vim.g.vimtex_compiler_progname = "nvr"
-vim.g.vimtex_view_method = "zathura"
-vim.g.vimtex_format_enabled = 1
-vim.g.vimtex_quickfix_enabled = 0
-vim.g.vimtex_compiler_latexmk = {
-	options = {
-		"-verbose",
-		"-file-line-error",
-		"-synctex=1",
-		"-interaction=nonstopmode",
-		"-shell-escape",
-	},
-}
 
 require("config.usercmds")

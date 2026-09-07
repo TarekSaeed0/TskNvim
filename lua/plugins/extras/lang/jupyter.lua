@@ -1,7 +1,11 @@
 return {
 	{
 		"GCBallesteros/jupytext.nvim",
-		enabled = vim.fn.executable("jupytext") == 1,
+		dependencies = {
+			"mason-org/mason.nvim",
+			optional = true,
+			opts = { ensure_installed = { "jupytext" } },
+		},
 		opts = {
 			style = "markdown",
 			output_extension = "md",

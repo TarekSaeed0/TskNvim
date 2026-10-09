@@ -9,7 +9,7 @@ local flutter = {
 	},
 	{
 		provider = function()
-			return " 󰾰 " .. vim.g.flutter_tools_decorations.device
+			return " 󰾰 " .. vim.g.flutter_tools_decorations.device.name
 		end,
 		condition = function()
 			return vim.g.flutter_tools_decorations.device

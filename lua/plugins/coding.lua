@@ -41,4 +41,10 @@ return {
 			},
 		},
 	},
+	{
+		import = "plugins.extras.coding.git",
+		enabled = function()
+			return vim.fn.executable("git") == 1
+		end,
+	},
 }

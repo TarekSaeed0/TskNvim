@@ -9,7 +9,10 @@ return {
 						return
 					end
 
-					vim.lsp.document_color.enable(true, { bufnr = bufnr }, { style = "virtual" })
+					local client = vim.lsp.get_client_by_id(args.data.client_id)
+					if client and client:supports_method("textDocument/documentColor", bufnr) then
+						pcall(vim.lsp.document_color.enable, true, { bufnr = bufnr }, { style = "virtual" })
+					end
 				end,
 			})
 		end,

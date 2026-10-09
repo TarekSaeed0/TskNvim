@@ -12,12 +12,6 @@ return {
 		end,
 	},
 	{
-		import = "plugins.extras.lang.git",
-		enabled = function()
-			return vim.fn.executable("git") == 1
-		end,
-	},
-	{
 		import = "plugins.extras.lang.java",
 		enabled = function()
 			return vim.fn.executable("javac") == 1

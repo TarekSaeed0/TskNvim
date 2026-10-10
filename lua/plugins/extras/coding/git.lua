@@ -23,8 +23,11 @@ return {
 			enhanced_diff_hl = true,
 			use_icons = true,
 			view = {
+				default = {
+					layout = vim.o.columns / vim.o.lines >= 2.4 and "diff2_horizontal" or "diff2_vertical",
+				},
 				merge_tool = {
-					layout = "diff3_mixed",
+					layout = vim.o.columns / vim.o.lines >= 2.4 and "diff3_mixed" or "diff3_vertical",
 					disable_diagnostics = true,
 					winbar_info = true,
 				},

@@ -29,11 +29,24 @@ return {
 					winbar_info = true,
 				},
 			},
+			file_panel = {
+				listing_style = "list",
+			},
 		},
 		cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewToggleFiles", "DiffviewFocusFiles", "DiffviewFileHistory" },
 		keys = {
-			{ "<leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Open Diffview" },
-			{ "<leader>gD", "<cmd>DiffviewClose<cr>", desc = "Close Diffview" },
+			{
+				"<leader>gv",
+				function()
+					local lib = require("diffview.lib")
+					if lib.get_current_view() then
+						vim.cmd("DiffviewClose")
+					else
+						vim.cmd("DiffviewOpen")
+					end
+				end,
+				desc = "Toggle Diffview",
+			},
 		},
 	},
 }
